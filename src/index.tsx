@@ -9,14 +9,33 @@ const LINKING_ERROR =
 const VgRetailerSdk = NativeModules.VgRetailerSdk
   ? NativeModules.VgRetailerSdk
   : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+    {},
+    {
+      get() {
+        throw new Error(LINKING_ERROR);
+      },
+    }
+  );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return VgRetailerSdk.multiply(a, b);
+export function rewardPointsHistory(requestData: any): Promise<number> {
+
+  return VgRetailerSdk.rewardPointsHistory(requestData);
+}
+export function ScannedBalancePoints(requestData: any): Promise<number> {
+
+  return VgRetailerSdk.ScannedBalancePoints(requestData);
+}
+
+export function userScanOutPointSummary(requestData: any): Promise<number> {
+
+  return VgRetailerSdk.userScanOutPointSummary(requestData);
+}
+
+export function InitializeSDK(requestData: any): Promise<number> {
+
+  return VgRetailerSdk.InitializeSDK(requestData);
+}
+
+export function postData(): Promise<any> {
+  return VgRetailerSdk.postData();
 }

@@ -11,11 +11,16 @@ npm install react-native-vg-retailer-sdk
 ## Usage
 
 ```js
-import { multiply } from 'react-native-vg-retailer-sdk';
+import { rewardPointsHistory,ScannedBalancePoints,userScanOutPointSummary,InitializeSDK } from 'react-native-vg-retailer-sdk';
 
 // ...
 
-const result = await multiply(3, 7);
+ let data = await InitializeSDK({
+        baseurl: <<FROM_EVOLVE>>,
+        accesstoken:<<ACCESS_TOKEN HERE>>
+        refreshtoken:<<REFRESH_TOKEN_HERE>>
+      });
+      console.log(data);
 ```
 
 ## Contributing
