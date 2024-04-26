@@ -13,35 +13,9 @@ import {
 export default function App() {
   const [result, setResult] = React.useState<string | number | undefined>();
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-    console.log('back here');
-  }, []);
-  async function bankdetails() {
-    try {
-      let data = await sampletry({
-        bankIfsc: 'PUNB0601500',
-        bankAccNo: '6015001500010225',
-        bankAccHolderName: '',
-        bankAccType: '',
-        bankNameAndBranch: '',
-        checkPhoto: '',
-      });
-      console.log(data, '>>>>>>>>>>>>>>>>');
-      setResult(data.toString());
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
-  // async function userExists() {
-  //   try {
-  //     let data = await checkIfUserExists('9811555789');
-  //     console.log(data, '>>>>>>>>>>>>>>>>');
-  //     setResult(data.toString());
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+  }, []);
+
 
   async function userRewardHistory() {
     try {
@@ -95,7 +69,7 @@ export default function App() {
         refreshtoken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE0MDk5ODEyLCJleHAiOjE3MTY2OTE4MTJ9.lyse71L2mbUeyK0cZLarfxsorDZ-YQN2h8nJS78ImBg',
       });
-      console.log(data, '>>>>>>>>>>>>>>>>');
+      console.log(data);
       setResult(data.toString());
     } catch (err) {
       console.log(err);

@@ -9,47 +9,29 @@ const LINKING_ERROR =
 const VgRetailerSdk = NativeModules.VgRetailerSdk
   ? NativeModules.VgRetailerSdk
   : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+    {},
+    {
+      get() {
+        throw new Error(LINKING_ERROR);
+      },
+    }
+  );
 
-export function multiply(a: number, b: number): Promise<number> {
-  console.log('inside multiplyyyyy function');
-  return VgRetailerSdk.multiply(a, b);
-}
-export function sampletry(requestData: any): Promise<number> {
-  console.log('inside sampletryyyyy4 function', requestData);
-
-  return VgRetailerSdk.sampletry(requestData);
-}
-export function checkIfUserExists(mobileNumber: string): Promise<number> {
-  console.log('inside checkIfUserExists function', mobileNumber);
-
-  return VgRetailerSdk.checkIfUserExists(mobileNumber);
-}
 export function rewardPointsHistory(requestData: any): Promise<number> {
-  console.log('inside rewardpoints history function', requestData);
 
   return VgRetailerSdk.rewardPointsHistory(requestData);
 }
 export function ScannedBalancePoints(requestData: any): Promise<number> {
-  console.log('inside scanned Balance points history function', requestData);
 
   return VgRetailerSdk.ScannedBalancePoints(requestData);
 }
 
 export function userScanOutPointSummary(requestData: any): Promise<number> {
-  console.log('inside userScanOutPointSummary function', requestData);
 
   return VgRetailerSdk.userScanOutPointSummary(requestData);
 }
 
 export function InitializeSDK(requestData: any): Promise<number> {
-  console.log('inside initialize sdk function', requestData);
 
   return VgRetailerSdk.InitializeSDK(requestData);
 }
