@@ -47,3 +47,13 @@ export function userScanOutPointSummary(requestData: any): Promise<number> {
 
   return VgRetailerSdk.userScanOutPointSummary(requestData);
 }
+
+export function InitializeSDK(requestData: any): Promise<number> {
+  console.log('inside initialize sdk function', requestData);
+
+  return VgRetailerSdk.InitializeSDK(requestData);
+}
+
+export function postData(): Promise<any> {
+  return VgRetailerSdk.postData();
+}
