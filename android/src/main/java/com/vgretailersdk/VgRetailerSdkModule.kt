@@ -40,7 +40,7 @@ class VgRetailerSdkModule(reactContext: ReactApplicationContext) :
   }
   
   @ReactMethod
-  fun sampletry(requestData: ReadableMap,promise: Promise) {
+  fun verifyBankDetails(requestData: ReadableMap,promise: Promise) {
     val refreshToken = SDKConfig.refreshtoken
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     refresAccessTokenObject.refreshAccessToken(){ refreshedToken: String?, error: VolleyError? ->

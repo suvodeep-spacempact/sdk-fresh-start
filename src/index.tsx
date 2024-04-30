@@ -21,10 +21,10 @@ export function multiply(a: number, b: number): Promise<number> {
   console.log('inside multiplyyyyy function');
   return VgRetailerSdk.multiply(a, b);
 }
-export function sampletry(requestData: any): Promise<number> {
+export function verifyBankDetails(requestData: any): Promise<number> {
   console.log('inside sampletryyyyy4 function', requestData);
 
-  return VgRetailerSdk.sampletry(requestData);
+  return VgRetailerSdk.verifyBankDetails(requestData);
 }
 export function checkIfUserExists(mobileNumber: string): Promise<number> {
   console.log('inside checkIfUserExists function', mobileNumber);

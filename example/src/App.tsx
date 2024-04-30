@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import {
   multiply,
-  sampletry,
+  verifyBankDetails,
   rewardPointsHistory,
   ScannedBalancePoints,
   userScanOutPointSummary,
@@ -18,7 +18,7 @@ export default function App() {
   }, []);
   async function bankdetails() {
     try {
-      let data = await sampletry({
+      let data = await verifyBankDetails({
         bankIfsc: 'PUNB0601500',
         bankAccNo: '6015001500010225',
         bankAccHolderName: '',
