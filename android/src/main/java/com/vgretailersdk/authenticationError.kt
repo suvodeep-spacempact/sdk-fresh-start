@@ -1,2 +1,2 @@
 package com.vgretailersdk
-class AuthenticationError(message: String) : Exception(message)
+class RegenerateAccessTokenError(message: String) : Exception(message)
