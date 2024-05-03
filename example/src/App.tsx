@@ -30,6 +30,7 @@ export default function App() {
       setResult(data.toString());
     } catch (err) {
       console.log(err);
+      setResult((err as Error).toString());
     }
   }
 
@@ -91,9 +92,9 @@ export default function App() {
       let data = await InitializeSDK({
         baseurl: 'http://34.93.239.251:5000/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE0MDk5ODEyLCJleHAiOjE3MTY2OTE4MTJ9.JwtVxVS4usJzc9yzhvG9IgS8IQ3pJI1skTHNIaUwuzQ',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE0NDYxNTgyLCJleHAiOjE3MTcwNTM1ODJ9.I3l5G-_w6nRC_petziS0Nqp2cDSAzuAtekg4FwxBmzI',
         refreshtoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE0MDk5ODEyLCJleHAiOjE3MTY2OTE4MTJ9.lyse71L2mbUeyK0cZLarfxsorDZ-YQN2h8nJS78ImBg',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE0NDYxNTgyLCJleHAiOjE3MTcwNTM1ODJ9.JRtKXweNjyFVfoZ9mNxjIwsOHPzPqxiMxWsvZ9yDcAo',
       });
       console.log(data, '>>>>>>>>>>>>>>>>');
       setResult(data.toString());

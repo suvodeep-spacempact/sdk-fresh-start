@@ -54,6 +54,6 @@ export function InitializeSDK(requestData: any): Promise<number> {
   return VgRetailerSdk.InitializeSDK(requestData);
 }
 
-export function postData(): Promise<any> {
-  return VgRetailerSdk.postData();
-}
+// export function postData(): Promise<any> {
+//   return VgRetailerSdk.postData();
+// }
