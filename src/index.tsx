@@ -75,9 +75,12 @@ export function registerWarranty(requestData: any): Promise<number> {
   console.log('inside requestData function', requestData);
   return VgRetailerSdk.registerWarranty(requestData);
 }
-export function getEligibleProducts(categoryId: String,schemeId: String): Promise<number> {
-  console.log('inside requestData function', categoryId,schemeId);
-  return VgRetailerSdk.getEligibleProducts(categoryId,schemeId);
+export function getEligibleProducts(
+  categoryId: String,
+  schemeId: String
+): Promise<number> {
+  console.log('inside requestData function', categoryId, schemeId);
+  return VgRetailerSdk.getEligibleProducts(categoryId, schemeId);
 }
 // export function getComboSlabSchemes(requestData: any): Promise<number> {
 //   console.log('inside requestData function', requestData);
@@ -92,4 +95,3 @@ export function RewardsPoints(): Promise<number> {
   console.log('inside Reward points function');
   return VgRetailerSdk.userScanOutPointSummary({});
 }
-
