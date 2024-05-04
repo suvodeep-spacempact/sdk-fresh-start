@@ -13,47 +13,38 @@ import com.google.gson.Gson
 import org.json.JSONObject
 import com.google.gson.JsonObject
 import com.android.volley.VolleyError
+import com.vgretailersdk.RegenerateAccessTokenError
+import com.android.volley.toolbox.RequestFuture
+import com.facebook.react.bridge.Promise
 
 class GenerateAccessToken(refreshtoken: String, reactContext: ReactApplicationContext){
-    // var refreshtoken : String = ""
-    // var reactContext: ReactApplicationContext
     var refreshtoken: String = refreshtoken
     var reactContext: ReactApplicationContext = reactContext
-    // constructor(refreshtoken : String,reactContext: ReactApplicationContext) {
-    //     this.refreshtoken = refreshtoken
-    //     this.reactContext = reactContext
-    // }
-
-    fun refreshAccessToken(callback: (String?, VolleyError?) -> Unit){
-        Log.d("TAG", "inside refresh token functionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
+    fun refreshAccessToken(){
+        Log.d("cat","inside refresh token function")
         val context = reactContext
         val queue = Volley.newRequestQueue(context)
+        val future = RequestFuture.newFuture<String>()
         val stringRequestone = object : StringRequest(
-            Method.POST, SDKConfig.baseurl+"/user/refreshAccessToken",
+            Method.POST, 
+            SDKConfig.baseurl+"/user/refreshAccessToken",
             Response.Listener { response ->
-            Log.d("TAG", "generate accessssssssss tokennnnnnnnnnnnnnn Response is: $response")
-            Log.d("TAG", "Line after response")
-            val dataType = response::class.java.simpleName
-            Log.d("TAG","DATA TYPE IS $dataType")
-
-            val jsonResponse = JSONObject(response)
-            SDKConfig.refreshtoken = jsonResponse.getString("refreshToken")
-            SDKConfig.accesstoken = jsonResponse.getString("accessToken")
-            Log.d("TAG","NEW REFRESH TOKEN IS :${SDKConfig.refreshtoken}")
-            callback(SDKConfig.accesstoken, null)
-        },
+                Log.d("cat","inside response block")
+                val dataType = response::class.java.simpleName
+                val jsonResponse = JSONObject(response)
+                SDKConfig.refreshtoken = jsonResponse.getString("refreshToken")
+                SDKConfig.accesstoken = jsonResponse.getString("accessToken")
+                future.onResponse(response)
+            },
         Response.ErrorListener { error ->
-            Log.e("TAG", "generate accessssssssssss tokennnnnnnnnnnnn errorrrr occurred:", error)
-            callback(null, error)
+            Log.d("cat","inside error block")
+            val gson = Gson().toJson(error.networkResponse)
+            future.onErrorResponse(error)
         }) {
             override fun getBody(): ByteArray {
-                //val jsonBody = Gson().toJson(requestBodyone)
                 val jsonBody2 = JsonObject().apply{
                     addProperty("refreshToken",SDKConfig.refreshtoken)
                 }
-                Log.d("TAG","&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-                Log.d("TAG", jsonBody2.toString())
-                Log.d("TAG","------------------------------------------")
                 return jsonBody2.toString().toByteArray()
             }
             override fun getBodyContentType(): String {
@@ -66,6 +57,13 @@ class GenerateAccessToken(refreshtoken: String, reactContext: ReactApplicationCo
         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
     )
     queue.add(stringRequestone)
-    Log.d("TAG","COMPLETED FUNCTION")
+    try {
+        Log.d("cat","inside future block response")
+        val response = future.get()
+        Log.d("cat","response inside future block response is $response")
+    } catch (e: Exception) {
+        Log.d("cat","inside catch block of future")
+        throw RegenerateAccessTokenError("Error in generate Access token function")
+    }
     }
 }
