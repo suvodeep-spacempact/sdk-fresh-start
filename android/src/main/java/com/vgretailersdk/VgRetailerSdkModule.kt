@@ -21,6 +21,9 @@ import com.vgretailersdk.CheckIfUserExistRequest
 import com.vgretailersdk.RegisterWarrantyRequest
 import com.vgretailersdk.Cresp
 import com.vgretailersdk.SelectedProd
+import com.vgretailersdk.PaperDbFunctions
+import com.vgretailersdk.InitializeSDKNew
+import com.vgretailersdk.ValidateRetailerCouponRequest
 import com.vgretailersdk.getCategoriesListRequest
 import com.vgretailersdk.RewardHistoryRequest
 import com.vgretailersdk.GetUserScanHistoryRequest
@@ -31,6 +34,7 @@ import com.vgretailersdk.GetComboSlabSchemesRequest
 import com.vgretailersdk.InitializeSDK
 import com.vgretailersdk.GenerateAccessToken
 import com.vgretailersdk.RegenerateAccessTokenError
+import com.vgretailersdk.ProcessForPinRequest
 import com.vgretailersdk.SDKConfig
 import com.android.volley.VolleyError
 import kotlinx.coroutines.*
@@ -39,7 +43,7 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableNativeMap
 import java.nio.charset.StandardCharsets
 import java.util.*
-
+import io.paperdb.Paper
 
 class VgRetailerSdkModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
@@ -73,13 +77,14 @@ fun isTokenExpired(token: String): Boolean {
 @ReactMethod
 fun verifyBankDetails(requestData: ReadableMap,promise: Promise) {
   try{
-    val token = SDKConfig.accesstoken
-    val refreshToken = SDKConfig.refreshtoken
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
     }
-    val accessToken = SDKConfig.accesstoken
+    val accessToken = paperDbObject.getAccessToken();
     val context = reactApplicationContext
     val queue = Volley.newRequestQueue(context)
     val request = VerifyBankDetailsRequest(
@@ -90,8 +95,9 @@ fun verifyBankDetails(requestData: ReadableMap,promise: Promise) {
       requestData.getString("bankNameAndBranch") ?: "",
       requestData.getString("checkPhoto") ?: ""
     )
+    val baseurl = paperDbObject.getBaseURL();
     val stringRequest = object : StringRequest(
-      Method.POST, SDKConfig.baseurl+"/banks/verifyBankDetails",
+      Method.POST, baseurl+"/banks/verifyBankDetails",
       Response.Listener { response ->
       promise.resolve(response)
       },
@@ -137,8 +143,6 @@ fun verifyBankDetails(requestData: ReadableMap,promise: Promise) {
       queue.add(stringRequest)
     }catch (e: Exception) {
       if(e is RegenerateAccessTokenError){
-        Log.d("cat","inside if 1");
-        Log.d("cat","error is",e);
         val jsonObject = JSONObject()
         jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
         jsonObject.put("code", 440)
@@ -157,13 +161,15 @@ fun verifyBankDetails(requestData: ReadableMap,promise: Promise) {
 @ReactMethod
 fun getCategoriesList(requestData: ReadableMap,promise: Promise){
   try{
-    val token = SDKConfig.accesstoken
-    val refreshToken = SDKConfig.refreshtoken
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
     }
-    val accessToken = SDKConfig.accesstoken
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
     val context = reactApplicationContext
     val queue = Volley.newRequestQueue(context)
     val categoriesArray: Array<Int> = if (requestData.hasKey("categories")) {
@@ -176,9 +182,10 @@ fun getCategoriesList(requestData: ReadableMap,promise: Promise){
     } else {
       emptyArray()
     }
+
     val requestBody = getCategoriesListRequest(categoriesArray)
     val stringRequest = object : StringRequest(
-      Method.POST, SDKConfig.baseurl+"/product/getCategoriesList",
+      Method.POST, baseurl+"/product/getCategoriesList",
       Response.Listener { response ->
         promise.resolve(response)
       },
@@ -244,13 +251,15 @@ fun getCategoriesList(requestData: ReadableMap,promise: Promise){
 @ReactMethod
 fun getUserBasePoints(requestData: ReadableMap,promise: Promise){
   try{
-    val token = SDKConfig.accesstoken
-    val refreshToken = SDKConfig.refreshtoken
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
     }
-    val accessToken = SDKConfig.accesstoken
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
     val context = reactApplicationContext
     val queue = Volley.newRequestQueue(context)
     val categoryIdsArray: Array<String> = if (requestData.hasKey("categoryIds")) {
@@ -276,7 +285,7 @@ fun getUserBasePoints(requestData: ReadableMap,promise: Promise){
     }
     val requestBody = getUserBasePointsRequest(categoryIdsArray,subCategoryIdsArray)
     val stringRequest = object : StringRequest(
-      Method.POST, SDKConfig.baseurl+"/coupon/getUserBasePoints",
+      Method.POST, baseurl+"/coupon/getUserBasePoints",
       Response.Listener { response ->
         promise.resolve(response)
       },
@@ -342,13 +351,15 @@ fun getUserBasePoints(requestData: ReadableMap,promise: Promise){
 @ReactMethod
 fun getUserScanHistory(requestData: ReadableMap,promise: Promise){
   try{
-    val token = SDKConfig.accesstoken
-    val refreshToken = SDKConfig.refreshtoken
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
     }
-    val accessToken = SDKConfig.accesstoken
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
     val context = reactApplicationContext
     val queue = Volley.newRequestQueue(context)
     val statusArray: Array<String> = if (requestData.hasKey("status")) {
@@ -368,7 +379,7 @@ fun getUserScanHistory(requestData: ReadableMap,promise: Promise){
       requestData.getString("couponCode") ?: "",
     )
     val stringRequest = object : StringRequest(
-      Method.POST, SDKConfig.baseurl+"/coupon/getUserScanHistory",
+      Method.POST, baseurl+"/coupon/getUserScanHistory",
       Response.Listener { response ->
         promise.resolve(response)
       },
@@ -435,13 +446,15 @@ fun getUserScanHistory(requestData: ReadableMap,promise: Promise){
 @ReactMethod
 fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
   try{
-    val token = SDKConfig.accesstoken
-    val refreshToken = SDKConfig.refreshtoken
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
     }
-    val accessToken = SDKConfig.accesstoken
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
     val context = reactApplicationContext
     val queue = Volley.newRequestQueue(context)
     val modeArray: Array<String> = if (requestData.hasKey("mode")) {
@@ -474,7 +487,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
         requestData.getString("userId") ?: "",   
     )
     val stringRequest = object : StringRequest(
-        Method.POST, SDKConfig.baseurl+"/product/userRewardHistory",
+        Method.POST, baseurl+"/product/userRewardHistory",
         Response.Listener { response ->
             promise.resolve(response)
         },
@@ -542,13 +555,15 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
   @ReactMethod
   fun ScannedBalancePoints(requestData: ReadableMap,promise: Promise){
     try{
-      val token = SDKConfig.accesstoken
-      val refreshToken = SDKConfig.refreshtoken
-      val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
-      if (isTokenExpired(token)) {
-        refresAccessTokenObject.refreshAccessToken()
-      }
-      val accessToken = SDKConfig.accesstoken
+      val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
       val context = reactApplicationContext
       val queue = Volley.newRequestQueue(context)
       val categoriesArray: Array<Int> = if (requestData.hasKey("categories")) {
@@ -577,7 +592,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
         requestData.getString("userId") ?: "",
     )
     val stringRequest = object : StringRequest(
-        Method.POST, SDKConfig.baseurl+"/product/userScannedBalancePoints",
+        Method.POST, baseurl+"/product/userScannedBalancePoints",
         Response.Listener { response ->
             promise.resolve(response)
         },
@@ -644,13 +659,15 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
   @ReactMethod
   fun userScanOutPointSummary(requestData: ReadableMap,promise: Promise){
     try{
-      val token = SDKConfig.accesstoken
-      val refreshToken = SDKConfig.refreshtoken
-      val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
-      if (isTokenExpired(token)) {
-        refresAccessTokenObject.refreshAccessToken()
-      }
-      val accessToken = SDKConfig.accesstoken
+      val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
       val context = reactApplicationContext
       val queue = Volley.newRequestQueue(context)
           val categoriesArray: Array<Int> = if (requestData.hasKey("categories")) {
@@ -679,7 +696,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
         requestData.getString("userId") ?: "",
     )
     val stringRequest = object : StringRequest(
-        Method.POST, SDKConfig.baseurl+"/product/userScanOutPointSummary",
+        Method.POST, baseurl+"/product/userScanOutPointSummary",
         Response.Listener { response ->
             promise.resolve(response)
         },
@@ -743,19 +760,21 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
   }
 
   @ReactMethod
-  fun captureCustomerDetails(mobileNo: String,promise: Promise){
+  fun captureCustomerDetails(requestData: ReadableMap,promise: Promise){
     try{
-      val token = SDKConfig.accesstoken
-      val refreshToken = SDKConfig.refreshtoken
-      val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
-      if (isTokenExpired(token)) {
-        refresAccessTokenObject.refreshAccessToken()
-      }
-      val accessToken = SDKConfig.accesstoken
+      val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
       val context = reactApplicationContext
       val queue = Volley.newRequestQueue(context)
-      val url = SDKConfig.baseurl + "/product/getCustomerDetails"
-      val queryParams = hashMapOf("mobileNo" to mobileNo)
+      val url = baseurl + "/product/getCustomerDetails"
+      val mobileNo = requestData.getString("mobileNo")
       val fullUrl = "$url/$mobileNo"
       Log.d("cat",fullUrl)
       val stringRequest = object : StringRequest(
@@ -818,88 +837,92 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
   @ReactMethod
   fun registerWarranty(requestData: ReadableMap,promise: Promise){
     try{
-      val token = SDKConfig.accesstoken
-      val refreshToken = SDKConfig.refreshtoken
-      val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
-      if (isTokenExpired(token)) {
-        refresAccessTokenObject.refreshAccessToken()
-      }
-      val accessToken = SDKConfig.accesstoken
+      val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
       val context = reactApplicationContext
       val queue = Volley.newRequestQueue(context)
+      val cresp = requestData.getMap("cresp")
+      val selectedProd = requestData.getMap("selectedProd")
       val requestBody = RegisterWarrantyRequest(
-        requestData.getString("nameTitle") ?: "",
-        requestData.getString("contactNo") ?: "",
-        requestData.getString("name") ?: "",
-        requestData.getString("email") ?: "",
-        requestData.getString("currAdd") ?: "",
-        requestData.getString("alternateNo") ?: "",
-        requestData.getString("state") ?: "",
-        requestData.getString("district") ?: "",
-        requestData.getString("city") ?: "",
-        requestData.getString("landmark") ?: "",
-        requestData.getString("pinCode") ?: "",
-        requestData.getString("dealerName") ?: "",
-        requestData.getString("dealerAdd") ?: "",
-        requestData.getString("dealerState") ?: "",
-        requestData.getString("dealerDist") ?: "",
-        requestData.getString("dealerCity") ?: "",
-        requestData.getString("dealerPinCode") ?: "",
-        requestData.getString("dealerNumber") ?: "",
-        requestData.getInt("addedBy") ?: 0,
-        requestData.getString("billDetails") ?: "",
-        requestData.getString("warrantyPhoto") ?: "",
-        requestData.getString("sellingPrice") ?: "",
-        requestData.getString("emptStr") ?: "",
-        Cresp(
-          requestData.getString("custIdForProdInstall") ?: "",
-          requestData.getString("modelForProdInstall") ?: "", 
-          requestData.getInt("errorCode") ?: 0,
-          requestData.getString("errorMsg") ?: "",
-          requestData.getInt("statusType") ?: 0,
-          requestData.getString("balance") ?: "",
-          requestData.getString("currentPoints") ?: "",
-          requestData.getString("couponPoints") ?: "",
-          requestData.getString("promotionPoints") ?: "",
-          requestData.getString("transactId") ?: "",
-          requestData.getString("schemePoints") ?: "",
-          requestData.getString("basePoints") ?: "",
-          requestData.getString("clubPoints") ?: "",
-          requestData.getString("scanDate") ?: "",
-          requestData.getString("scanStatus") ?: "",
-          requestData.getString("copuonCode") ?: "",
-          requestData.getString("bitEligibleScratchCard") ?.toBoolean() ?: false,
-          requestData.getInt("pardId") ?: 0,
-          requestData.getString("partNumber") ?: "",
-          requestData.getString("partName") ?: "",
-          requestData.getString("couponCode") ?: "",
-          requestData.getString("skuDetail") ?: "",
-          requestData.getString("purchaseDate") ?: "",
-          requestData.getString("categoryId") ?: "",
-          requestData.getString("category") ?: "",
-          requestData.getInt("anomaly") ?: 0,
-          requestData.getString("warranty") ?: "",
-        ),
-        SelectedProd(
-          requestData.getString("specs") ?: "",
-          requestData.getString("pointsFormat") ?: "",
-          requestData.getString("product") ?: "",
-          requestData.getString("productName") ?: "",
-          requestData.getString("productCategory") ?: "",
-          requestData.getString("productCode") ?: "",
-          requestData.getInt("points") ?: 0,
-          requestData.getString("imageUrl") ?: "",
-          requestData.getString("userId") ?: "",
-          requestData.getString("productId") ?: "",
-          requestData.getString("paytmMobileNo") ?: "",
-        ),
-        requestData.getString("latitude") ?: "",
-        requestData.getString("longitude") ?: "",   
-        requestData.getString("geolocation") ?: "",
-        requestData.getString("dealerCategory") ?: "",
-      )
+      requestData.getString("nameTitle") ?: "",
+      requestData.getString("contactNo") ?: "",
+      requestData.getString("name") ?: "",
+      requestData.getString("email") ?: "",
+      requestData.getString("currAdd") ?: "",
+      requestData.getString("alternateNo") ?: "",
+      requestData.getString("state") ?: "",
+      requestData.getString("district") ?: "",
+      requestData.getString("city") ?: "",
+      requestData.getString("landmark") ?: "",
+      requestData.getString("pinCode") ?: "",
+      requestData.getString("dealerName") ?: "",
+      requestData.getString("dealerAdd") ?: "",
+      requestData.getString("dealerState") ?: "",
+      requestData.getString("dealerDist") ?: "",
+      requestData.getString("dealerCity") ?: "",
+      requestData.getString("dealerPinCode") ?: "",
+      requestData.getString("dealerNumber") ?: "",
+      requestData.getInt("addedBy") ?: 0,
+      requestData.getString("billDetails") ?: "",
+      requestData.getString("warrantyPhoto") ?: "",
+      requestData.getString("sellingPrice") ?: "",
+      requestData.getString("emptStr") ?: "",
+      Cresp(
+        cresp?.getString("custIdForProdInstall") ?: "",
+        cresp?.getString("modelForProdInstall") ?: "", 
+        cresp?.getInt("errorCode") ?: 0,
+        cresp?.getString("errorMsg") ?: "",
+        cresp?.getInt("statusType") ?: 0,
+        cresp?.getString("balance") ?: "",
+        cresp?.getString("currentPoints") ?: "",
+        cresp?.getString("couponPoints") ?: "",
+        cresp?.getString("promotionPoints") ?: "",
+        cresp?.getString("transactId") ?: "",
+        cresp?.getString("schemePoints") ?: "",
+        cresp?.getString("basePoints") ?: "",
+        cresp?.getString("clubPoints") ?: "",
+        cresp?.getString("scanDate") ?: "",
+        cresp?.getString("scanStatus") ?: "",
+        cresp?.getString("copuonCode") ?: "",
+        cresp?.getBoolean("bitEligibleScratchCard") ?: false,
+        cresp?.getInt("pardId") ?: 0,
+        cresp?.getString("partNumber") ?: "",
+        cresp?.getString("partName") ?: "",
+        cresp?.getString("couponCode") ?: "",
+        cresp?.getString("skuDetail") ?: "",
+        cresp?.getString("purchaseDate") ?: "",
+        cresp?.getString("categoryId") ?: "",
+        cresp?.getString("category") ?: "",
+        cresp?.getInt("anomaly") ?: 0,
+        cresp?.getString("warranty") ?: "",
+      ),
+      SelectedProd(
+        selectedProd?.getString("specs") ?: "",
+        selectedProd?.getString("pointsFormat") ?: "",
+        selectedProd?.getString("product") ?: "",
+        selectedProd?.getString("productName") ?: "",
+        selectedProd?.getString("productCategory") ?: "",
+        selectedProd?.getString("productCode") ?: "",
+        selectedProd?.getInt("points") ?: 0,
+        selectedProd?.getString("imageUrl") ?: "",
+        selectedProd?.getString("userId") ?: "",
+        selectedProd?.getString("productId") ?: "",
+        selectedProd?.getString("paytmMobileNo") ?: "",
+      ),
+      requestData.getString("latitude") ?: "",
+      requestData.getString("longitude") ?: "",   
+      requestData.getString("geolocation") ?: "",
+      requestData.getString("dealerCategory") ?: "",
+    )
       val stringRequest = object : StringRequest(
-        Method.POST, SDKConfig.baseurl+"/product/registerWarranty",
+        Method.POST, baseurl+"/product/registerWarranty",
         Response.Listener { response ->
             promise.resolve(response)
         },
@@ -963,22 +986,26 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
   }
 
   @ReactMethod 
-  fun getEligibleProducts(categoryId : String,schemeId: String,promise: Promise){
+  fun getEligibleProducts(requestData: ReadableMap,promise: Promise){
     try{
-      val token = SDKConfig.accesstoken
-      val refreshToken = SDKConfig.refreshtoken
-      val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
-      if (isTokenExpired(token)) {
-        refresAccessTokenObject.refreshAccessToken()
-      }
-      val accessToken = SDKConfig.accesstoken
+      val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
       val context = reactApplicationContext
       val queue = Volley.newRequestQueue(context)
       val requestBody = JSONObject()
-      requestBody.put("categoryId", categoryId)
-      requestBody.put("schemeId", schemeId)
+      Log.d("b","$requestBody")
+      requestBody.put("categoryId", requestData.getString("categoryId"))
+      requestBody.put("schemeId", requestData.getString("schemeId"))
+      Log.d("b"," request body is $requestBody")
       val stringRequest = object : StringRequest(
-        Method.POST, SDKConfig.baseurl+"/schemes/getEligibleProducts",
+        Method.POST, baseurl+"/schemes/getEligibleProducts",
         Response.Listener { response ->
             promise.resolve(response)
         },
@@ -1005,9 +1032,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
           promise.reject(jsonString)
         }) {
         override fun getBody(): ByteArray {
-            val gson = Gson()
-            val jsonBody = gson.toJson(requestBody)
-            return jsonBody.toByteArray()
+            return requestBody.toString().toByteArray()
         }
         override fun getBodyContentType(): String {
             return "application/json"
@@ -1026,6 +1051,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
     queue.add(stringRequest)
 
     }catch(error:Exception){
+      Log.d("b","error is $error")
       if(error is RegenerateAccessTokenError){
         val jsonObject = JSONObject()
         jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
@@ -1045,13 +1071,15 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
 @ReactMethod
 fun getComboSlabSchemes(requestData: ReadableMap,promise: Promise){
   try{
-    val token = SDKConfig.accesstoken
-      val refreshToken = SDKConfig.refreshtoken
-      val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
-      if (isTokenExpired(token)) {
-        refresAccessTokenObject.refreshAccessToken()
-      }
-      val accessToken = SDKConfig.accesstoken
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
       val context = reactApplicationContext
       val queue = Volley.newRequestQueue(context)
       val categoryIdsArray: Array<Int> = if (requestData.hasKey("categoryIds")) {
@@ -1071,7 +1099,7 @@ fun getComboSlabSchemes(requestData: ReadableMap,promise: Promise){
         requestData.getString("status") ?: ""
     )
     val stringRequest = object : StringRequest(
-        Method.POST, SDKConfig.baseurl+"/schemes/getComboSlabSchemes",
+        Method.POST, baseurl+"/schemes/getComboSlabSchemes",
         Response.Listener { response ->
             promise.resolve(response)
         },
@@ -1134,21 +1162,120 @@ fun getComboSlabSchemes(requestData: ReadableMap,promise: Promise){
 }
 
 @ReactMethod
-fun getSlabView(schemeId: String,promise: Promise){
+fun getSlabView(requestData: ReadableMap,promise: Promise){
   try{
-    val token = SDKConfig.accesstoken
-      val refreshToken = SDKConfig.refreshtoken
-      val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
-      if (isTokenExpired(token)) {
-        refresAccessTokenObject.refreshAccessToken()
-      }
-      val accessToken = SDKConfig.accesstoken
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
       val context = reactApplicationContext
       val queue = Volley.newRequestQueue(context)
       val requestBody = JSONObject()
-      requestBody.put("schemeId", schemeId)
+      requestBody.put("schemeId", requestData.getString("schemeId"))
       val stringRequest = object : StringRequest(
-        Method.POST, SDKConfig.baseurl+"/schemes/getSlabView",
+        Method.POST, baseurl+"/schemes/getSlabView",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getBody(): ByteArray {
+            // val gson = Gson()
+            // val jsonBody = gson.toJson(requestBody)
+            // Log.d("d","jsonboduy is $jsonBody")
+            // return jsonBody.toByteArray()
+            return requestBody.toString().toByteArray()
+        }
+        override fun getBodyContentType(): String {
+            return "application/json"
+        }
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
+    }
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
+
+  }catch(error:Exception){
+    if(error is RegenerateAccessTokenError){
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+      jsonObject.put("code", 440)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    }
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "Internal Server Error.")
+    jsonObject.put("code", 500)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)
+  }
+}
+
+
+@ReactMethod
+fun getCrossSchemesDetails(requestData: ReadableMap,promise: Promise){
+  try{
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      val categoryIdsArray: Array<Int> = if (requestData.hasKey("categoryIds")) {
+        val modeReadableArray = requestData.getArray("categoryIds")
+        val modeList = mutableListOf<Int>()
+        for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+            modeList.add(modeReadableArray?.getInt(i) ?: 0)
+        }
+        modeList.toTypedArray()
+    } else {
+        emptyArray()
+    }
+      val requestBody = GetComboSlabSchemesRequest(
+        categoryIdsArray,
+        requestData.getString("endDate") ?: "",
+        requestData.getString("fromDate") ?: "",
+        requestData.getString("status") ?: ""
+    )
+    val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/schemes/getSchemes/comboDetails",
         Response.Listener { response ->
             promise.resolve(response)
         },
@@ -1194,7 +1321,99 @@ fun getSlabView(schemeId: String,promise: Promise){
         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
     )
     queue.add(stringRequest)
+  }catch(error:Exception){
+    if(error is RegenerateAccessTokenError){
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+      jsonObject.put("code", 440)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    }
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "Internal Server Error.")
+    jsonObject.put("code", 500)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)
+  }
+}
 
+@ReactMethod
+fun getSlabBasedSchemes(requestData: ReadableMap,promise: Promise){
+  try{
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      val categoryIdsArray: Array<Int> = if (requestData.hasKey("categoryIds")) {
+        val modeReadableArray = requestData.getArray("categoryIds")
+        val modeList = mutableListOf<Int>()
+        for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+            modeList.add(modeReadableArray?.getInt(i) ?: 0)
+        }
+        modeList.toTypedArray()
+    } else {
+        emptyArray()
+    }
+      val requestBody = GetComboSlabSchemesRequest(
+        categoryIdsArray,
+        requestData.getString("endDate") ?: "",
+        requestData.getString("fromDate") ?: "",
+        requestData.getString("status") ?: ""
+    )
+    val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/schemes/getSchemes/slabDetails",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getBody(): ByteArray {
+            val gson = Gson()
+            val jsonBody = gson.toJson(requestBody)
+            return jsonBody.toByteArray()
+        }
+        override fun getBodyContentType(): String {
+            return "application/json"
+        }
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
+    }
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
   }catch(error:Exception){
     if(error is RegenerateAccessTokenError){
       val jsonObject = JSONObject()
@@ -1212,10 +1431,440 @@ fun getSlabView(schemeId: String,promise: Promise){
 }
 
 
+@ReactMethod
+fun validateRetailerCoupon(requestData: ReadableMap,promise: Promise){
+  try{
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      val requestBody = ValidateRetailerCouponRequest(
+        requestData.getString("category") ?: "",
+        requestData.getString("couponCode") ?: "",
+        requestData.getString("from") ?: "",
+        requestData.getString("geolocation") ?: "",
+        requestData.getString("latitude") ?: "",
+        requestData.getString("longitude") ?: "",
+        requestData.getString("retailerCoupon") ?.toBoolean() ?: false,
+    )
+    val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/coupon/validateRetailerCoupon",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getBody(): ByteArray {
+            val gson = Gson()
+            val jsonBody = gson.toJson(requestBody)
+            return jsonBody.toByteArray()
+        }
+        override fun getBodyContentType(): String {
+            return "application/json"
+        }
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
+    }
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
+  }catch(error:Exception){
+    if(error is RegenerateAccessTokenError){
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+      jsonObject.put("code", 440)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    }
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "Internal Server Error.")
+    jsonObject.put("code", 500)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)
+  }
+}
+
+@ReactMethod
+fun registerCustomer(requestData: ReadableMap,promise: Promise){
+  try{
+    val paperDbObject = PaperDbFunctions();
+  val token = paperDbObject.getAccessToken();
+  val refreshToken = paperDbObject.getRefreshToken();
+  val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+  if (isTokenExpired(token)) {
+    refresAccessTokenObject.refreshAccessToken()
+  }
+  val accessToken = paperDbObject.getAccessToken();
+  val baseurl = paperDbObject.getBaseURL();
+    val context = reactApplicationContext
+    val queue = Volley.newRequestQueue(context)
+    val cresp = requestData.getMap("cresp")
+    val selectedProd = requestData.getMap("selectedProd")
+    val requestBody = RegisterWarrantyRequest(
+      requestData.getString("nameTitle") ?: "",
+      requestData.getString("contactNo") ?: "",
+      requestData.getString("name") ?: "",
+      requestData.getString("email") ?: "",
+      requestData.getString("currAdd") ?: "",
+      requestData.getString("alternateNo") ?: "",
+      requestData.getString("state") ?: "",
+      requestData.getString("district") ?: "",
+      requestData.getString("city") ?: "",
+      requestData.getString("landmark") ?: "",
+      requestData.getString("pinCode") ?: "",
+      requestData.getString("dealerName") ?: "",
+      requestData.getString("dealerAdd") ?: "",
+      requestData.getString("dealerState") ?: "",
+      requestData.getString("dealerDist") ?: "",
+      requestData.getString("dealerCity") ?: "",
+      requestData.getString("dealerPinCode") ?: "",
+      requestData.getString("dealerNumber") ?: "",
+      requestData.getInt("addedBy") ?: 0,
+      requestData.getString("billDetails") ?: "",
+      requestData.getString("warrantyPhoto") ?: "",
+      requestData.getString("sellingPrice") ?: "",
+      requestData.getString("emptStr") ?: "",
+      Cresp(
+        cresp?.getString("custIdForProdInstall") ?: "",
+        cresp?.getString("modelForProdInstall") ?: "", 
+        cresp?.getInt("errorCode") ?: 0,
+        cresp?.getString("errorMsg") ?: "",
+        cresp?.getInt("statusType") ?: 0,
+        cresp?.getString("balance") ?: "",
+        cresp?.getString("currentPoints") ?: "",
+        cresp?.getString("couponPoints") ?: "",
+        cresp?.getString("promotionPoints") ?: "",
+        cresp?.getString("transactId") ?: "",
+        cresp?.getString("schemePoints") ?: "",
+        cresp?.getString("basePoints") ?: "",
+        cresp?.getString("clubPoints") ?: "",
+        cresp?.getString("scanDate") ?: "",
+        cresp?.getString("scanStatus") ?: "",
+        cresp?.getString("copuonCode") ?: "",
+        cresp?.getBoolean("bitEligibleScratchCard") ?: false,
+        cresp?.getInt("pardId") ?: 0,
+        cresp?.getString("partNumber") ?: "",
+        cresp?.getString("partName") ?: "",
+        cresp?.getString("couponCode") ?: "",
+        cresp?.getString("skuDetail") ?: "",
+        cresp?.getString("purchaseDate") ?: "",
+        cresp?.getString("categoryId") ?: "",
+        cresp?.getString("category") ?: "",
+        cresp?.getInt("anomaly") ?: 0,
+        cresp?.getString("warranty") ?: "",
+      ),
+      SelectedProd(
+        selectedProd?.getString("specs") ?: "",
+        selectedProd?.getString("pointsFormat") ?: "",
+        selectedProd?.getString("product") ?: "",
+        selectedProd?.getString("productName") ?: "",
+        selectedProd?.getString("productCategory") ?: "",
+        selectedProd?.getString("productCode") ?: "",
+        selectedProd?.getInt("points") ?: 0,
+        selectedProd?.getString("imageUrl") ?: "",
+        selectedProd?.getString("userId") ?: "",
+        selectedProd?.getString("productId") ?: "",
+        selectedProd?.getString("paytmMobileNo") ?: "",
+      ),
+      requestData.getString("latitude") ?: "",
+      requestData.getString("longitude") ?: "",   
+      requestData.getString("geolocation") ?: "",
+      requestData.getString("dealerCategory") ?: "",
+    )
+    val stringRequest = object : StringRequest(
+      Method.POST, baseurl+"/product/registerCustomer",
+      Response.Listener { response ->
+          promise.resolve(response)
+      },
+      Response.ErrorListener { error ->
+        val errorCode = error.networkResponse?.statusCode
+        val gson = Gson().toJson(error.networkResponse)
+        if(errorCode == 403 || errorCode == 401){
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+          jsonObject.put("code", 440)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }else if(errorCode == 440){
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Please retry the action")
+          jsonObject.put("code", 440)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }
+        val jsonObject = JSONObject()
+        jsonObject.put("message", "Internal Server Error.")
+        jsonObject.put("code", 500)
+        val jsonString = jsonObject.toString()
+        promise.reject(jsonString)
+      }) {
+      override fun getBody(): ByteArray {
+          val gson = Gson()
+          val jsonBody = gson.toJson(requestBody)
+          return jsonBody.toByteArray()
+      }
+      override fun getBodyContentType(): String {
+          return "application/json"
+      }
+      override fun getHeaders(): Map<String, String> {
+          val headers = HashMap<String, String>()
+          headers["Authorization"] = "Bearer $accessToken"
+          return headers
+      }
+  }
+  stringRequest.retryPolicy = DefaultRetryPolicy(
+      50000,
+      DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+      DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+  )
+  queue.add(stringRequest)
+
+  }catch(error: Exception){
+    Log.d("b","$error")
+    if(error is RegenerateAccessTokenError){
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+      jsonObject.put("code", 440)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    }
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "Internal Server Error.")
+    jsonObject.put("code", 500)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)      
+  }
+}
+
+
+@ReactMethod
+fun processForPin(requestData: ReadableMap,promise: Promise){
+  try{
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      val requestBody = ProcessForPinRequest(
+        requestData.getString("userMobileNumber") ?: "",
+        requestData.getString("couponCode") ?: "",
+        requestData.getString("pin") ?: "",
+        requestData.getString("smsText") ?: "",
+        requestData.getString("from") ?: "",
+        requestData.getString("userType") ?: "",
+        requestData.getString("userId") ?: "",
+        requestData.getString("apmID") ?: "",
+        requestData.getString("userCode") ?: "",
+        requestData.getString("latitude") ?: "",
+        requestData.getString("longitude") ?: "",
+        requestData.getString("geolocation") ?: "",
+        requestData.getString("category") ?: "",
+    )
+    val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/coupon/processForPin",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getBody(): ByteArray {
+            val gson = Gson()
+            val jsonBody = gson.toJson(requestBody)
+            return jsonBody.toByteArray()
+        }
+        override fun getBodyContentType(): String {
+            return "application/json"
+        }
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
+    }
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
+  }catch(error:Exception){
+    if(error is RegenerateAccessTokenError){
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+      jsonObject.put("code", 440)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    }
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "Internal Server Error.")
+    jsonObject.put("code", 500)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)
+  } 
+}
+
+@ReactMethod
+fun processCoupon(requestData: ReadableMap,promise: Promise){
+  try{
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      val requestBody = ProcessForPinRequest(
+        requestData.getString("userMobileNumber") ?: "",
+        requestData.getString("couponCode") ?: "",
+        requestData.getString("pin") ?: "",
+        requestData.getString("smsText") ?: "",
+        requestData.getString("from") ?: "",
+        requestData.getString("userType") ?: "",
+        requestData.getString("userId") ?: "",
+        requestData.getString("apmID") ?: "",
+        requestData.getString("userCode") ?: "",
+        requestData.getString("latitude") ?: "",
+        requestData.getString("longitude") ?: "",
+        requestData.getString("geolocation") ?: "",
+        requestData.getString("category") ?: "",
+    )
+    val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/coupon/process",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          Log.d("b","error is in error listnere $error")
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          Log.d("b","error is in error listnere $gson")
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getBody(): ByteArray {
+            val gson = Gson()
+            val jsonBody = gson.toJson(requestBody)
+            return jsonBody.toByteArray()
+        }
+        override fun getBodyContentType(): String {
+            return "application/json"
+        }
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
+    }
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
+  }catch(error:Exception){
+    Log.d("b","$error")
+    if(error is RegenerateAccessTokenError){
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+      jsonObject.put("code", 440)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    }
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "Internal Server Error.")
+    jsonObject.put("code", 500)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)
+  } 
+}
+
+
+
+
 
   @ReactMethod
   fun InitializeSDK(requestData: ReadableMap,promise: Promise){
-    val sdk = InitializeSDK(
+    Paper.init(reactApplicationContext)
+    val sdk = InitializeSDKNew(
         requestData.getString("baseurl") ?: "",
         requestData.getString("accesstoken") ?: "",
         requestData.getString("refreshtoken") ?: "",

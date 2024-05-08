@@ -67,31 +67,56 @@ export function getUserScanHistory(requestData: any): Promise<number> {
   console.log('inside getUserBasePoints function', requestData);
   return VgRetailerSdk.getUserScanHistory(requestData);
 }
-export function captureCustomerDetails(mobileNo: string): Promise<number> {
-  console.log('inside captureCustomerDetails function', mobileNo);
-  return VgRetailerSdk.captureCustomerDetails(mobileNo);
+export function captureCustomerDetails(requestData: any): Promise<number> {
+  console.log('inside captureCustomerDetails function', requestData);
+  return VgRetailerSdk.captureCustomerDetails(requestData);
 }
 export function registerWarranty(requestData: any): Promise<number> {
   console.log('inside requestData function', requestData);
   return VgRetailerSdk.registerWarranty(requestData);
 }
 export function getEligibleProducts(
-  categoryId: String,
-  schemeId: String
+  requestData: any
 ): Promise<number> {
-  console.log('inside requestData function', categoryId, schemeId);
-  return VgRetailerSdk.getEligibleProducts(categoryId, schemeId);
+  console.log('inside requestData function', requestData);
+  return VgRetailerSdk.getEligibleProducts(requestData);
 }
 // export function getComboSlabSchemes(requestData: any): Promise<number> {
 //   console.log('inside requestData function', requestData);
 //   return VgRetailerSdk.getComboSlabSchemes(requestData);
 // }
-export function getSlabView(schemeId: String): Promise<number> {
-  console.log('inside requestData function', schemeId);
-  return VgRetailerSdk.getSlabView(schemeId);
+export function getSlabView(requestData: any): Promise<number> {
+  console.log('inside requestData function', requestData);
+  return VgRetailerSdk.getSlabView(requestData);
 }
 
 export function RewardsPoints(): Promise<number> {
   console.log('inside Reward points function');
   return VgRetailerSdk.userScanOutPointSummary({});
 }
+export function getCrossSchemesDetails(requestData: any): Promise<number> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.getCrossSchemesDetails(requestData);
+}
+export function getSlabBasedSchemes(requestData: any): Promise<number> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.getSlabBasedSchemes(requestData);
+}
+export function validateRetailerCoupon(requestData: any): Promise<number> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.validateRetailerCoupon(requestData);
+}
+
+export function registerCustomer(requestData: any): Promise<number> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.registerCustomer(requestData);
+}
+export function processForPin(requestData: any): Promise<number> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.processForPin(requestData);
+}
+export function processCoupon(requestData: any): Promise<number> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.processCoupon(requestData);
+}
+
