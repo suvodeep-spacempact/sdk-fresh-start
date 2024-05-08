@@ -28,9 +28,9 @@ import {
 export default function App() {
   const [result, setResult] = React.useState<string | number | undefined>();
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-    console.log('back here');
+
   }, []);
+
   async function bankdetails() {
     try {
       let data = await verifyBankDetails({
@@ -51,15 +51,7 @@ export default function App() {
     }
   }
 
-  // async function userExists() {
-  //   try {
-  //     let data = await checkIfUserExists('9811555789');
-  //     console.log(data, '>>>>>>>>>>>>>>>>');
-  //     setResult(data.toString());
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+
 
   async function userRewardHistory() {
     try {
@@ -468,7 +460,7 @@ export default function App() {
         refreshtoken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1MTU2NzMyLCJleHAiOjE3MTc3NDg3MzJ9.Y95UlruM5Gn3jI0VvTnCYbry4p8HyDCwh1M_r3v_YsU',
       });
-      console.log(data, '>>>>>>>>>>>>>>>>');
+      console.log(data);
       setResult(data.toString());
     } catch (err) {
       console.log(err);
