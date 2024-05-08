@@ -75,9 +75,7 @@ export function registerWarranty(requestData: any): Promise<number> {
   console.log('inside requestData function', requestData);
   return VgRetailerSdk.registerWarranty(requestData);
 }
-export function getEligibleProducts(
-  requestData: any
-): Promise<number> {
+export function getEligibleProducts(requestData: any): Promise<number> {
   console.log('inside requestData function', requestData);
   return VgRetailerSdk.getEligibleProducts(requestData);
 }
@@ -119,4 +117,3 @@ export function processCoupon(requestData: any): Promise<number> {
   console.log('inside Reward points function');
   return VgRetailerSdk.processCoupon(requestData);
 }
-
