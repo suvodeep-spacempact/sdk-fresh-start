@@ -87,6 +87,7 @@ android {
 repositories {
   mavenCentral()
   google()
+  maven { url 'https://jitpack.io' }
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
@@ -101,6 +102,7 @@ dependencies {
   implementation 'com.google.code.gson:gson:2.10.1'
   implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1-Beta'
   implementation 'io.github.pilgr:paperdb:2.7.2'
+  implementation 'com.github.hardillb:MultiPartVolley:0.0.4'
   
 }
 

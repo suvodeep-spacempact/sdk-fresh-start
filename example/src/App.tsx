@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { StyleSheet, View, Text, Button, ScrollView } from 'react-native';
 import {
-  multiply,
   verifyBankDetails,
   rewardPointsHistory,
   ScannedBalancePoints,
@@ -23,13 +22,15 @@ import {
   registerCustomer,
   processForPin,
   processCoupon,
+  getCategoryProductDetails,
+  bankTransfer,
+  scanIn,
+  getFile,
 } from 'react-native-vg-retailer-sdk';
 
 export default function App() {
   const [result, setResult] = React.useState<string | number | undefined>();
-  React.useEffect(() => {
-
-  }, []);
+  React.useEffect(() => {}, []);
 
   async function bankdetails() {
     try {
@@ -50,8 +51,6 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
-
-
 
   async function userRewardHistory() {
     try {
@@ -447,6 +446,78 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
+  async function get_Category_Product_Details() {
+    try {
+      let data = await getCategoryProductDetails({
+        subCategory: '6',
+        category: '1',
+        skuId: '',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function bank_Transfer() {
+    try {
+      let data = await bankTransfer({
+        amount: '100',
+        bankDetail: {
+          bankAccHolderName: 'ehhegge',
+          bankAccNo: '3461616',
+          bankAccType: '',
+          bankIfsc: 'zvzxbbx266',
+          bankNameAndBranch: 'Andhra bank',
+          checkPhoto: '451ac963-6290-4374-9881-9c54a76fee7b.jpg',
+        },
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+
+  async function scan_In() {
+    try {
+      let data = await scanIn({
+        couponCode: '7654367982156745',
+        pin: '<string>',
+        smsText: '<string>',
+        from: '<string>',
+        userType: '<string>',
+        userId: '<long>',
+        apmID: '<long>',
+        userCode: '<string>',
+        latitude: '<string>',
+        longitude: '<string>',
+        geolocation: '<string>',
+        category: '<string>',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_File() {
+    try {
+      let data = await getFile({
+        uuid: 'af0656a5-9a5e-4c4e-8da8-de91241a0dc3.png',
+        imageRelated: 'PROFILE',
+        userRole: '2',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
   // const volleyu = async () => {
   //   let data = await postData();
   //   console.log(data);
@@ -456,7 +527,7 @@ export default function App() {
       let data = await InitializeSDK({
         baseurl: 'http://34.93.239.251:5000/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1MTU2NzMyLCJleHAiOjE3MTc3NDg3MzJ9.mn9Xkdl0soVf19vlcXS4eVkArcfkB3mdBpXYVogppp4',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIzNDIwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDIwMTAzNCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4NzM2MDg4MjAiLCJkaXNwbGF5TmFtZSI6Ik1vaGl0IHRlc3QiLCJpYXQiOjE3MTUzMjA3ODcsImV4cCI6MTcxNzkxMjc4N30.T-d3TcVJ90DBUiDPEuSL0ezvuz1KElEv-b0lB3TaP0g',
         refreshtoken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1MTU2NzMyLCJleHAiOjE3MTc3NDg3MzJ9.Y95UlruM5Gn3jI0VvTnCYbry4p8HyDCwh1M_r3v_YsU',
       });
@@ -515,6 +586,13 @@ export default function App() {
         <Button title="register customer" onPress={register_Customer} />
         <Button title="Process for pin" onPress={process_For_Pin} />
         <Button title="Process Coupon" onPress={process_Coupon} />
+        <Button
+          title="Get Category Product details"
+          onPress={get_Category_Product_Details}
+        />
+        <Button title="Bank Transfer" onPress={bank_Transfer} />
+        <Button title="Scan In" onPress={scan_In} />
+        <Button title="Get File" onPress={get_File} />
         <Button title="Initialize SDK" onPress={intializesdk} />
         <Button title="Clear" onPress={() => setResult('')} />
       </View>

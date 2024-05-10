@@ -20,6 +20,8 @@ import com.android.volley.DefaultRetryPolicy
 import com.vgretailersdk.CheckIfUserExistRequest
 import com.vgretailersdk.RegisterWarrantyRequest
 import com.vgretailersdk.Cresp
+import com.vgretailersdk.PaymentDetails
+import com.vgretailersdk.BankDetail
 import com.vgretailersdk.SelectedProd
 import com.vgretailersdk.PaperDbFunctions
 import com.vgretailersdk.InitializeSDKNew
@@ -36,6 +38,7 @@ import com.vgretailersdk.GenerateAccessToken
 import com.vgretailersdk.RegenerateAccessTokenError
 import com.vgretailersdk.ProcessForPinRequest
 import com.vgretailersdk.SDKConfig
+import com.vgretailersdk.ScanInRequest
 import com.android.volley.VolleyError
 import kotlinx.coroutines.*
 import kotlinx.coroutines.android.*
@@ -44,6 +47,13 @@ import com.facebook.react.bridge.WritableNativeMap
 import java.nio.charset.StandardCharsets
 import java.util.*
 import io.paperdb.Paper
+import com.android.volley.Request.Method
+import java.util.HashMap
+import android.content.ContentResolver
+import android.net.Uri
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
+
 
 class VgRetailerSdkModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
@@ -1856,6 +1866,366 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
     promise.reject(jsonString)
   } 
 }
+
+@ReactMethod 
+  fun getCategoryProductDetails(requestData: ReadableMap,promise: Promise){
+    try{
+      val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      val requestBody = JSONObject()
+      Log.d("b","$requestBody")
+      requestBody.put("subCategory", requestData.getString("subCategory"))
+      requestBody.put("category", requestData.getString("category"))
+      requestBody.put("skuId", requestData.getString("skuId"))
+      Log.d("b"," request body is $requestBody")
+      val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/product/getCategoryProductDetails",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getBody(): ByteArray {
+            return requestBody.toString().toByteArray()
+        }
+        override fun getBodyContentType(): String {
+            return "application/json"
+        }
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
+      }
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
+
+    }catch(error:Exception){
+      Log.d("b","error is $error")
+      if(error is RegenerateAccessTokenError){
+        val jsonObject = JSONObject()
+        jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+        jsonObject.put("code", 440)
+        val jsonString = jsonObject.toString()
+        promise.reject(jsonString)
+      }
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Internal Server Error.")
+      jsonObject.put("code", 500)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)      
+    }
+    
+  }
+
+
+  @ReactMethod
+  fun bankTransfer(requestData: ReadableMap,promise: Promise){
+    try{
+      val paperDbObject = PaperDbFunctions();
+      val token = paperDbObject.getAccessToken();
+      val refreshToken = paperDbObject.getRefreshToken();
+      val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+      if (isTokenExpired(token)) {
+        refresAccessTokenObject.refreshAccessToken()
+      }
+      val accessToken = paperDbObject.getAccessToken();
+      val baseurl = paperDbObject.getBaseURL();
+      val bankDetail = requestData.getMap("bankDetail")
+        val context = reactApplicationContext
+        val queue = Volley.newRequestQueue(context)
+        val requestBody = PaymentDetails(
+          requestData.getString("amount") ?: "",
+          BankDetail(
+            bankDetail?.getString("bankAccHolderName") ?: "",
+            bankDetail?.getString("bankAccNo") ?: "",
+            bankDetail?.getString("bankAccType") ?: "",
+            bankDetail?.getString("bankIfsc") ?: "",
+            bankDetail?.getString("bankNameAndBranch") ?: "",
+            bankDetail?.getString("checkPhoto") ?: "",
+          )
+      )
+      val stringRequest = object : StringRequest(
+          Method.POST, baseurl+"/order/bankTransfer",
+          Response.Listener { response ->
+              promise.resolve(response)
+          },
+          Response.ErrorListener { error ->
+            Log.d("b","error is in error listnere $error")
+            val errorCode = error.networkResponse?.statusCode
+            val gson = Gson().toJson(error.networkResponse)
+            Log.d("b","error is in error listnere $gson")
+            if(errorCode == 403 || errorCode == 401){
+              val jsonObject = JSONObject()
+              jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+              jsonObject.put("code", 440)
+              val jsonString = jsonObject.toString()
+              promise.reject(jsonString)
+            }else if(errorCode == 440){
+              val jsonObject = JSONObject()
+              jsonObject.put("message", "Please retry the action")
+              jsonObject.put("code", 440)
+              val jsonString = jsonObject.toString()
+              promise.reject(jsonString)
+            }
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Internal Server Error.")
+            jsonObject.put("code", 500)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }) {
+          override fun getBody(): ByteArray {
+              val gson = Gson()
+              val jsonBody = gson.toJson(requestBody)
+              return jsonBody.toByteArray()
+          }
+          override fun getBodyContentType(): String {
+              return "application/json"
+          }
+          override fun getHeaders(): Map<String, String> {
+              val headers = HashMap<String, String>()
+              headers["Authorization"] = "Bearer $accessToken"
+              return headers
+          }
+      }
+      stringRequest.retryPolicy = DefaultRetryPolicy(
+          50000,
+          DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+          DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+      )
+      queue.add(stringRequest)
+    }catch(error:Exception){
+      Log.d("b","$error")
+      if(error is RegenerateAccessTokenError){
+        val jsonObject = JSONObject()
+        jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+        jsonObject.put("code", 440)
+        val jsonString = jsonObject.toString()
+        promise.reject(jsonString)
+      }
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Internal Server Error.")
+      jsonObject.put("code", 500)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    } 
+  }
+
+
+  @ReactMethod
+fun scanIn(requestData: ReadableMap,promise: Promise){
+  try{
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      val requestBody = ScanInRequest(
+        requestData.getString("couponCode") ?: "",
+        requestData.getString("pin") ?: "",
+        requestData.getString("smsText") ?: "",
+        requestData.getString("from") ?: "",
+        requestData.getString("userType") ?: "",
+        requestData.getString("userId") ?:"", 
+        requestData.getString("apmID") ?:"",
+        requestData.getString("userCode") ?: "",
+        requestData.getString("latitude") ?: "",
+        requestData.getString("longitude") ?: "",
+        requestData.getString("geolocation") ?: "",
+        requestData.getString("category") ?: "",
+    )
+    val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/coupon/scanIn",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          Log.d("b","error is in error listnere $error")
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          Log.d("b","error is in error listnere $gson")
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getBody(): ByteArray {
+            val gson = Gson()
+            val jsonBody = gson.toJson(requestBody)
+            return jsonBody.toByteArray()
+        }
+        override fun getBodyContentType(): String {
+            return "application/json"
+        }
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
+    }
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
+  }catch(error:Exception){
+    Log.d("b","$error")
+    if(error is RegenerateAccessTokenError){
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+      jsonObject.put("code", 440)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    }
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "Internal Server Error.")
+    jsonObject.put("code", 500)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)
+  } 
+}
+
+
+@ReactMethod
+  fun getFile(requestData: ReadableMap,promise: Promise){
+    try{
+      val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      val url = baseurl + "/file"
+      val uuid = requestData.getString("uuid")
+      val imageRelated = requestData.getString("imageRelated")
+      val userRole = requestData.getString("userRole")
+      val fullUrl = "$url/$uuid/$imageRelated/$userRole"
+
+      Log.d("b",fullUrl)
+      val stringRequest = object : StringRequest(
+        Method.GET, 
+        fullUrl, // Modified URL with query parameters
+        Response.Listener { response ->
+          promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          Log.d("b","error is $error")
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          Log.d("b","error response is $gson")
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          } else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+          override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+          }
+        }
+        stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
+    }catch(error: Exception){
+      Log.d("b","error is : ",error)
+      if(error is RegenerateAccessTokenError){
+        val jsonObject = JSONObject()
+        jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+        jsonObject.put("code", 440)
+        val jsonString = jsonObject.toString()
+        promise.reject(jsonString)
+      }
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Internal Server Error.")
+      jsonObject.put("code", 500)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)      
+    }
+  }
+
+
+
+
+
+
+
 
 
 

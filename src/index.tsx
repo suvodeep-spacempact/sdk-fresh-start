@@ -117,3 +117,21 @@ export function processCoupon(requestData: any): Promise<number> {
   console.log('inside Reward points function');
   return VgRetailerSdk.processCoupon(requestData);
 }
+export function getCategoryProductDetails(requestData: any): Promise<number> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.getCategoryProductDetails(requestData);
+}
+export function bankTransfer(requestData: any): Promise<number> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.bankTransfer(requestData);
+}
+
+export function scanIn(requestData: any): Promise<number> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.scanIn(requestData);
+}
+
+export function getFile(requestData: any): Promise<number> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.getFile(requestData);
+}
