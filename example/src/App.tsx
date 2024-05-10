@@ -17,6 +17,12 @@ import {
   //getComboSlabSchemes,
   getSlabView,
   RewardsPoints,
+  getSlabBasedSchemes,
+  getCrossSchemesDetails,
+  validateRetailerCoupon,
+  registerCustomer,
+  processForPin,
+  processCoupon,
 } from 'react-native-vg-retailer-sdk';
 
 export default function App() {
@@ -28,7 +34,7 @@ export default function App() {
   async function bankdetails() {
     try {
       let data = await verifyBankDetails({
-        bankIfsc: 'SBIN0010790',
+        bankIfsc: 'SBIN0010792',
         bankAccNo: '31348186046',
         bankAccHolderName: '',
         bankAccType: '',
@@ -50,9 +56,11 @@ export default function App() {
   async function userRewardHistory() {
     try {
       let data = await rewardPointsHistory({
-        //mode: ['paytm', 'bank transfer'],
-        status: ['pending', 'success'],
-        //userId: '22390',
+        // "mode" : ["payt", "bank transfer"], //bank transfer or UPI
+        status: ['success'], //success, pending, failed
+        // "fromDate" : "2021-01-02",
+        // "toDate" : "2022-04-12",
+        //"userId":"22390"
       });
       console.log(data, '>>>>>>>>>>>>>>>>');
       setResult(data.toString());
@@ -66,8 +74,8 @@ export default function App() {
     try {
       let data = await ScannedBalancePoints({
         categories: [1, 3],
-        subCategories: [5],
-        userId: '22390',
+        subCategories: [],
+        //userId: '22390',
       });
       console.log(data, '>>>>>>>>>>>>>>>>');
       setResult(data.toString());
@@ -80,7 +88,7 @@ export default function App() {
     try {
       let data = await userScanOutPointSummary({
         categories: [1, 3],
-        subCategories: [5],
+        subCategories: [6],
         userId: '22390',
       });
       console.log(data, '>>>>>>>>>>>>>>>>');
@@ -93,7 +101,7 @@ export default function App() {
   async function get_Categories_List() {
     try {
       let data = await getCategoriesList({
-        categories: [2],
+        categories: [1, 3, 5],
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -105,8 +113,8 @@ export default function App() {
   async function get_User_Base_Points() {
     try {
       let data = await getUserBasePoints({
-        categoryIds: ['1'],
-        subCategoryIds: ['8'],
+        categoryIds: ['1', '3'],
+        subCategoryIds: ['8', '9'],
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -132,7 +140,7 @@ export default function App() {
   }
   async function capture_Customer_Details() {
     try {
-      let data = await captureCustomerDetails('9039128610');
+      let data = await captureCustomerDetails({ mobileNo: '9039128615' });
       console.log(data, '--------------');
       setResult(data.toString());
     } catch (err) {
@@ -143,12 +151,75 @@ export default function App() {
   async function register_Warranty() {
     try {
       let data = await registerWarranty({
-        addedBy: 1,
-        errorCode: 1,
-        statusType: 1,
-        pardId: 1,
-        anomaly: 1,
-        points: 1,
+        nameTitle: '<string>',
+        contactNo: '9811555789',
+        name: '<string>',
+        email: '<string>',
+        currAdd: '<string>',
+        alternateNo: '<string>',
+        state: '<string>',
+        district: '<string>',
+        city: '<string>',
+        landmark: '<string>',
+        pinCode: '<string>',
+        dealerName: '<string>',
+        dealerAdd: '<string>',
+        dealerState: '<string>',
+        dealerDist: '<string>',
+        dealerCity: '<string>',
+        dealerPinCode: '<string>',
+        dealerNumber: '<string>',
+        addedBy: 2,
+        billDetails: '<string>',
+        warrantyPhoto: '<string>',
+        sellingPrice: '<string>',
+        emptStr: '<string>',
+        cresp: {
+          custIdForProdInstall: '<string>',
+          modelForProdInstall: '<string>',
+          errorCode: 0,
+          errorMsg: '<string>',
+          statusType: 1,
+          balance: '<string>',
+          currentPoints: '<string>',
+          couponPoints: '<string>',
+          promotionPoints: '<string>',
+          transactId: '<string>',
+          schemePoints: '<string>',
+          basePoints: '<string>',
+          clubPoints: '<string>',
+          scanDate: '<string>',
+          scanStatus: '<string>',
+          copuonCode: '<string>',
+          bitEligibleScratchCard: false,
+          pardId: 123,
+          partNumber: '<string>',
+          partName: '<string>',
+          couponCode: '<string>',
+          skuDetail: '<string>',
+          purchaseDate: '<string>',
+          categoryId: '<string>',
+          category: '<string>',
+          anomaly: 1,
+          warranty: '<string>',
+        },
+        selectedProd: {
+          specs: '<string>',
+          pointsFormat: '<string>',
+          product: '<string>',
+          productName: '<string>',
+          productCategory: '<string>',
+          productCode: '<string>',
+          points: 0,
+          imageUrl: '<string>',
+          userId: '<string>',
+          productId: '<string>',
+          paytmMobileNo: '<string>',
+        },
+        latitude: '<string>',
+        longitude: 'asd',
+        geolocation: '<string>',
+        dealerCategory: '<string>',
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -159,7 +230,10 @@ export default function App() {
   }
   async function get_Eligible_Products() {
     try {
-      let data = await getEligibleProducts('s', 's');
+      let data = await getEligibleProducts({
+        //"categoryId":"1",
+        schemeId: 'VGSCH4E8FB',
+      });
       console.log(data, '--------------');
       setResult(data.toString());
     } catch (err) {
@@ -177,9 +251,39 @@ export default function App() {
   //     setResult((err as Error).toString());
   //   }
   // }
+  async function get_Combo_Based_Schemes() {
+    try {
+      let data = await getCrossSchemesDetails({
+        categoryIds: [],
+        endDate: '',
+        fromDate: '',
+        status: '',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_Slab_Based_Schemes() {
+    try {
+      let data = await getSlabBasedSchemes({
+        categoryIds: [],
+        endDate: '',
+        fromDate: '',
+        status: '',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
   async function get_Slab_View() {
     try {
-      let data = await getSlabView('dfhjk');
+      let data = await getSlabView({ schemeId: 'VGSCHFC60D' });
       console.log(data, '--------------');
       setResult(data.toString());
     } catch (err) {
@@ -197,6 +301,152 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
+  async function validate_Retailer_Coupon() {
+    try {
+      let data = await validateRetailerCoupon({
+        category: 'Customer',
+        couponCode: '5362224187701942',
+        from: 'APP',
+        geolocation: '',
+        latitude: '12.892242',
+        longitude: '77.5976361',
+        retailerCoupon: 'true',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function register_Customer() {
+    try {
+      let data = await registerCustomer({
+        nameTitle: '',
+        contactNo: '9435731954',
+        name: 'B k singh',
+        email: 'madhuranjankumar1983.mk@gmail.com',
+        currAdd: 'Muzaffarpur',
+        alternateNo: '',
+        state: 'Bihar',
+        district: 'Muzaffarpur',
+        city: 'Muzaffarpur',
+        landmark: '',
+        pinCode: '843108',
+        dealerName: 'Madhu Ranjan Kumar',
+        dealerAdd: '',
+        dealerState: 'Bihar',
+        dealerDist: 'Muzaffarpur',
+        dealerCity: 'Muzaffarpur',
+        dealerPinCode: '843108',
+        dealerNumber: '9934674364',
+        addedBy: '',
+        billDetails: '',
+        warrantyPhoto: '4b34eb9a-6e4c-4314-b408-31f6623b0a71.jpg',
+        sellingPrice: '',
+        emptStr: '',
+        cresp: {
+          custIdForProdInstall: '',
+          modelForProdInstall: '',
+          errorCode: 0,
+          errorMsg: '',
+          statusType: '',
+          balance: '',
+          currentPoints: '',
+          couponPoints: '',
+          promotionPoints: '',
+          transactId: '',
+          schemePoints: '',
+          basePoints: '',
+          clubPoints: '',
+          scanDate: '',
+          scanStatus: '',
+          copuonCode: '8467909055761994',
+          bitEligibleScratchCard: 1,
+          pardId: '',
+          partNumber: '',
+          partName: '',
+          couponCode: '',
+          skuDetail: 'VG 400',
+          purchaseDate: '',
+          categoryId: '',
+          category: '',
+          anomaly: 0,
+          warranty: '183',
+        },
+        selectedProd: {
+          specs: '',
+          pointsFormat: '',
+          product: '',
+          productName: '',
+          productCategory: '',
+          productCode: '',
+          points: 0.0,
+          imageUrl: '',
+          userId: '',
+          productId: '',
+          paytmMobileNo: '',
+        },
+        latitude: '',
+        longitude: '',
+        geolocation: '',
+        dealerCategory: '',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function process_For_Pin() {
+    try {
+      let data = await processForPin({
+        userMobileNumber: '',
+        couponCode: '',
+        pin: '',
+        smsText: '',
+        from: '',
+        userType: '',
+        userId: '453',
+        apmID: '',
+        userCode: '',
+        latitude: '',
+        longitude: '',
+        geolocation: '',
+        category: '',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function process_Coupon() {
+    try {
+      let data = await processCoupon({
+        userMobileNumber: '9811555789',
+        couponCode: '9802522723211275',
+        pin: '1234',
+        smsText: '',
+        from: '',
+        userType: '',
+        userId: '453',
+        apmID: '',
+        userCode: '',
+        latitude: '',
+        longitude: '',
+        geolocation: '',
+        category: '',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
   // const volleyu = async () => {
   //   let data = await postData();
   //   console.log(data);
@@ -206,9 +456,9 @@ export default function App() {
       let data = await InitializeSDK({
         baseurl: 'http://34.93.239.251:5000/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE0NzM4ODMzLCJleHAiOjE3MTczMzA4MzN9.lbfD-850A91qSufMr2Dt8_Mmof2ikYhRcVtCxBb27zg',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1MTU2NzMyLCJleHAiOjE3MTc3NDg3MzJ9.mn9Xkdl0soVf19vlcXS4eVkArcfkB3mdBpXYVogppp4',
         refreshtoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE0NzM4ODMzLCJleHAiOjE3MTczMzA4MzN9.GOLLeDmQ2EOEMPdyInBIwTgGtmyvYA8nJU3kjm0FTe0',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1MTU2NzMyLCJleHAiOjE3MTc3NDg3MzJ9.Y95UlruM5Gn3jI0VvTnCYbry4p8HyDCwh1M_r3v_YsU',
       });
       console.log(data);
       setResult(data.toString());
@@ -249,6 +499,22 @@ export default function App() {
       /> */}
         <Button title="Get Slab View" onPress={get_Slab_View} />
         <Button title="Get Reward Points" onPress={reward_points} />
+        <Button
+          title="Get Combo based schemes "
+          onPress={get_Combo_Based_Schemes}
+        />
+        <Button
+          title="Get slab based schemes "
+          onPress={get_Slab_Based_Schemes}
+        />
+        <Button title="Get Reward Points" onPress={reward_points} />
+        <Button
+          title="validate retailer coupon"
+          onPress={validate_Retailer_Coupon}
+        />
+        <Button title="register customer" onPress={register_Customer} />
+        <Button title="Process for pin" onPress={process_For_Pin} />
+        <Button title="Process Coupon" onPress={process_Coupon} />
         <Button title="Initialize SDK" onPress={intializesdk} />
         <Button title="Clear" onPress={() => setResult('')} />
       </View>
