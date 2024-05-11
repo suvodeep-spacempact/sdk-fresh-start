@@ -1,6 +1,13 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, Button, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  ScrollView,
+} from 'react-native';
+import {  launchImageLibrary } from 'react-native-image-picker';
 import {
   verifyBankDetails,
   rewardPointsHistory,
@@ -26,6 +33,8 @@ import {
   bankTransfer,
   scanIn,
   getFile,
+  uploadFile,
+  getTdsCerticateFiles,
 } from 'react-native-vg-retailer-sdk';
 
 export default function App() {
@@ -100,7 +109,7 @@ export default function App() {
   async function get_Categories_List() {
     try {
       let data = await getCategoriesList({
-        categories: [1, 3, 5],
+        categories: [1, 5],
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -112,8 +121,8 @@ export default function App() {
   async function get_User_Base_Points() {
     try {
       let data = await getUserBasePoints({
-        categoryIds: ['1', '3'],
-        subCategoryIds: ['8', '9'],
+        categoryIds: ['1'],
+        subCategoryIds: ['6'],
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -518,6 +527,21 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
+  async function get_Tds_Certicate_Files() {
+    try {
+      let data = await getTdsCerticateFiles({
+        fileId: '1',
+        fiscalStartYear: '',
+        fiscalEndYear: '',
+        quater: '',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
   // const volleyu = async () => {
   //   let data = await postData();
   //   console.log(data);
@@ -527,9 +551,9 @@ export default function App() {
       let data = await InitializeSDK({
         baseurl: 'http://34.93.239.251:5000/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIzNDIwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDIwMTAzNCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4NzM2MDg4MjAiLCJkaXNwbGF5TmFtZSI6Ik1vaGl0IHRlc3QiLCJpYXQiOjE3MTUzMjA3ODcsImV4cCI6MTcxNzkxMjc4N30.T-d3TcVJ90DBUiDPEuSL0ezvuz1KElEv-b0lB3TaP0g',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NDE0MDg4LCJleHAiOjE3MTgwMDYwODh9.XlCtUWZw-6pu8gfdj69ZwbgBWq97dxC5TnaELFv7eac',
         refreshtoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1MTU2NzMyLCJleHAiOjE3MTc3NDg3MzJ9.Y95UlruM5Gn3jI0VvTnCYbry4p8HyDCwh1M_r3v_YsU',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIzNDIwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDIwMTAzNCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4NzM2MDg4MjAiLCJkaXNwbGF5TmFtZSI6Ik1vaGl0IHRlc3QiLCJpYXQiOjE3MTUzNDQzNjYsImV4cCI6MTcxNzkzNjM2Nn0.ykMbfFU-D0Pl3R6hOx3shUBD1N-AjNmTeeVO8vvdN08',
       });
       console.log(data);
       setResult(data.toString());
@@ -538,6 +562,37 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
+  const handleCameraUpload = () => {
+    launchImageLibrary({
+      mediaType: 'photo',
+      includeBase64: false,
+    })
+      .then((response: any) => {
+        console.log(response);
+        uploadFile({
+          imageRelated: 'BILL',
+          userRole: '2',
+          file: {
+            fileType: response.assets[0].type,
+            fileUri: response.assets[0].uri,
+            fileName: response.assets[0].fileName,
+          },
+        })
+          .then((data: any) => {
+            setResult(data.toString());
+          })
+          .catch((er) => {
+            setResult((er as Error).toString());
+          });
+        setResult(data.toString());
+      })
+      .catch((er) => {
+        console.log(er);
+        setResult((er as Error).toString());
+      });
+
+    console.log('adfsdvjksdvjkdjkvda');
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -595,6 +650,11 @@ export default function App() {
         <Button title="Get File" onPress={get_File} />
         <Button title="Initialize SDK" onPress={intializesdk} />
         <Button title="Clear" onPress={() => setResult('')} />
+        <Button title="Test" onPress={handleCameraUpload} />
+        <Button
+          title="Get Tds Certificate Files"
+          onPress={get_Tds_Certicate_Files}
+        />
       </View>
     </ScrollView>
   );

@@ -103,6 +103,7 @@ dependencies {
   implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1-Beta'
   implementation 'io.github.pilgr:paperdb:2.7.2'
   implementation 'com.github.hardillb:MultiPartVolley:0.0.4'
-  
+  implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    
 }
 
