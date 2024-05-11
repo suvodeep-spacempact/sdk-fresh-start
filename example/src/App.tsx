@@ -1,13 +1,7 @@
 import * as React from 'react';
 
-import {
-  StyleSheet,
-  View,
-  Text,
-  Button,
-  ScrollView,
-} from 'react-native';
-import {  launchImageLibrary } from 'react-native-image-picker';
+import { StyleSheet, View, Text, Button, ScrollView } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 import {
   verifyBankDetails,
   rewardPointsHistory,
@@ -584,7 +578,7 @@ export default function App() {
           .catch((er) => {
             setResult((er as Error).toString());
           });
-        setResult(data.toString());
+        //setResult(data.toString());
       })
       .catch((er) => {
         console.log(er);
