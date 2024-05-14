@@ -28,7 +28,7 @@ import {
   scanIn,
   getFile,
   uploadFile,
-  getTdsCerticateFiles,
+  getTdsCertificate,
   getSchemeFileList,
   GetPrimarySchemeFileList,
 } from 'react-native-vg-retailer-sdk';
@@ -40,13 +40,13 @@ export default function App() {
   async function bankdetails() {
     try {
       let data = await verifyBankDetails({
-        bankIfsc: 'SBIN0010792',
-        bankAccNo: '31348186046',
-        bankAccHolderName: '',
-        bankAccType: '',
-        bankNameAndBranch: '',
-        checkPhoto: '',
-      });
+        "bankIfsc": "PUNB0601500",
+        "bankAccNo": "6015001500010225",
+        "bankAccHolderName": "",
+        "bankAccType": "",
+        "bankNameAndBranch": "",
+        "checkPhoto": ""
+    });
       console.log(typeof data, '****************');
       console.log(data, '---------------');
       console.log(data, '>>>>>>>>>>>>>>>>');
@@ -60,11 +60,11 @@ export default function App() {
   async function userRewardHistory() {
     try {
       let data = await rewardPointsHistory({
-        mode: ['bank transfer'], //bank transfer or UPI
-        status: [], //success, pending, failed
-        fromDate: '',
-        toDate: '',
-      });
+        "mode" : ["paytm"], 
+       "status" : [],
+        "fromDate" : "2022-09-01",
+        "toDate" : "2022-09-30"
+    });
       console.log(data, '>>>>>>>>>>>>>>>>');
       setResult(data.toString());
     } catch (err) {
@@ -76,7 +76,7 @@ export default function App() {
   async function ScannedBalancePoint() {
     try {
       let data = await ScannedBalancePoints({
-        categories: [1, 3],
+        categories: [3],
         subCategories: [],
         //userId: '22390',
       });
@@ -90,7 +90,7 @@ export default function App() {
   async function userScanOutPointSummaryfunction() {
     try {
       let data = await userScanOutPointSummary({
-        categories: [1, 3],
+        categories: [3],
         subCategories: [6],
         userId: '22390',
       });
@@ -104,7 +104,7 @@ export default function App() {
   async function get_Categories_List() {
     try {
       let data = await getCategoriesList({
-        categories: [1, 5],
+        categories: [4],
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -129,10 +129,11 @@ export default function App() {
   async function get_User_Scan_History() {
     try {
       let data = await getUserScanHistory({
-        status: ['success'],
-        scanType: 'Scan-out',
-        fromDate: '2023-12-04',
-        couponCode: '5084089287556709',
+        status: [],
+        scanType: '',
+        fromDate: '2021-10-10',
+        couponCode: '',
+        toDate:'2021-10-11'
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -234,7 +235,7 @@ export default function App() {
   async function get_Eligible_Products() {
     try {
       let data = await getEligibleProducts({
-        //"categoryId":"1",
+        "categoryId":"",
         schemeId: 'VGSCH4E8FB',
       });
       console.log(data, '--------------');
@@ -453,8 +454,8 @@ export default function App() {
   async function get_Category_Product_Details() {
     try {
       let data = await getCategoryProductDetails({
-        subCategory: '6',
-        category: '1',
+        subCategory: '3',
+        category: '',
         skuId: '',
       });
       console.log(data, '--------------');
@@ -467,7 +468,7 @@ export default function App() {
   async function bank_Transfer() {
     try {
       let data = await bankTransfer({
-        amount: '100',
+        amount: '0',
         bankDetail: {
           bankAccHolderName: 'ehhegge',
           bankAccNo: '3461616',
@@ -511,8 +512,8 @@ export default function App() {
   async function get_File() {
     try {
       let data = await getFile({
-        uuid: 'af0656a5-9a5e-4c4e-8da8-de91241a0dc3.png',
-        imageRelated: 'PROFILE',
+        uuid: 'bbcc2b15-047c-409a-8786-4ea50e8ac2c9.jpg',
+        imageRelated: 'BILL',
         userRole: '2',
       });
       console.log(data, '--------------');
@@ -524,7 +525,7 @@ export default function App() {
   }
   async function get_Tds_Certicate_Files() {
     try {
-      let data = await getTdsCerticateFiles({
+      let data = await getTdsCertificate({
         fileId: '1',
         fiscalStartYear: '',
         fiscalEndYear: '',
@@ -569,9 +570,9 @@ export default function App() {
       let data = await InitializeSDK({
         baseurl: 'http://34.93.239.251:5000/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NTk4MTgyLCJleHAiOjE3MTgxOTAxODJ9.fMHN7YmiD7k91WhGIxou460v9j4ZZ_6rsXT2BUFukCE',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NjY5NTI2LCJleHAiOjE3MTgyNjE1MjZ9.1tUgEOGEThmYxyR1gVzNeSLIyI5WVBIfY6X5A-l3oiw',
         refreshtoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NTk4MTgyLCJleHAiOjE3MTgxOTAxODJ9.6kqf8x8c91NFkfM6zKkcMe9B9Io4ef-YKyt1NHUWtwI',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NjY5NTI2LCJleHAiOjE3MTgyNjE1MjZ9.H5NDmlhRgyGfbHYUYcr346m6UMIFqccudLc2jQsMvAE',
       });
       console.log(data);
       setResult(data.toString());
@@ -597,6 +598,7 @@ export default function App() {
           },
         })
           .then((data: any) => {
+            console.log(data)
             setResult(data.toString());
           })
           .catch((er) => {

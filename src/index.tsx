@@ -135,7 +135,7 @@ export function getFile(requestData: any): Promise<any> {
 
 export function uploadFile(requestData: any): Promise<any> {
   console.log('inside upload file with params', requestData);
-  return VgRetailerSdk.uploadFileWithParams(requestData);
+  return VgRetailerSdk.uploadFile(requestData);
 }
 
 export function getSchemeFileList(requestData: any): Promise<any> {
@@ -143,9 +143,9 @@ export function getSchemeFileList(requestData: any): Promise<any> {
   return VgRetailerSdk.getSchemeFileList(requestData);
 }
 
-export function getTdsCerticateFiles(requestData: any): Promise<any> {
+export function getTdsCertificate(requestData: any): Promise<any> {
   console.log('inside getSchemeFileList', requestData);
-  return VgRetailerSdk.getTdsCerticateFiles(requestData);
+  return VgRetailerSdk.getTdsCertificate(requestData);
 }
 
 export function GetPrimarySchemeFileList(): Promise<any> {

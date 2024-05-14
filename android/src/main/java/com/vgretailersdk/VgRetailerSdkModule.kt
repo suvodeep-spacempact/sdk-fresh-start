@@ -410,6 +410,7 @@ fun getUserScanHistory(requestData: ReadableMap,promise: Promise){
       requestData.getString("scanType") ?: "",
       requestData.getString("fromDate") ?: "",
       requestData.getString("couponCode") ?: "",
+      requestData.getString("toDate") ?: "",
     )
     val stringRequest = object : StringRequest(
       Method.POST, baseurl+"/coupon/getUserScanHistory",
@@ -2384,7 +2385,7 @@ fun getSchemeFileList(requestData: ReadableMap,promise: Promise){
 
 
 @ReactMethod
-fun getTdsCerticateFiles(requestData: ReadableMap,promise: Promise) {
+fun getTdsCertificate(requestData: ReadableMap,promise: Promise) {
   try{
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
