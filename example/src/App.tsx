@@ -29,6 +29,8 @@ import {
   getFile,
   uploadFile,
   getTdsCerticateFiles,
+  getSchemeFileList,
+  GetPrimarySchemeFileList,
 } from 'react-native-vg-retailer-sdk';
 
 export default function App() {
@@ -58,11 +60,10 @@ export default function App() {
   async function userRewardHistory() {
     try {
       let data = await rewardPointsHistory({
-        // "mode" : ["payt", "bank transfer"], //bank transfer or UPI
-        status: ['success'], //success, pending, failed
-        // "fromDate" : "2021-01-02",
-        // "toDate" : "2022-04-12",
-        //"userId":"22390"
+        mode: ['bank transfer'], //bank transfer or UPI
+        status: [], //success, pending, failed
+        fromDate: '',
+        toDate: '',
       });
       console.log(data, '>>>>>>>>>>>>>>>>');
       setResult(data.toString());
@@ -536,6 +537,29 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
+  async function get_Scheme_File_List() {
+    try {
+      let data = await getSchemeFileList({
+        schemeId: 'VGSCHFC60D',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+
+  async function Get_Primary_Scheme_File_List() {
+    try {
+      let data = await GetPrimarySchemeFileList();
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
   // const volleyu = async () => {
   //   let data = await postData();
   //   console.log(data);
@@ -545,9 +569,9 @@ export default function App() {
       let data = await InitializeSDK({
         baseurl: 'http://34.93.239.251:5000/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NDE0MDg4LCJleHAiOjE3MTgwMDYwODh9.XlCtUWZw-6pu8gfdj69ZwbgBWq97dxC5TnaELFv7eac',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NTk4MTgyLCJleHAiOjE3MTgxOTAxODJ9.fMHN7YmiD7k91WhGIxou460v9j4ZZ_6rsXT2BUFukCE',
         refreshtoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIzNDIwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDIwMTAzNCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4NzM2MDg4MjAiLCJkaXNwbGF5TmFtZSI6Ik1vaGl0IHRlc3QiLCJpYXQiOjE3MTUzNDQzNjYsImV4cCI6MTcxNzkzNjM2Nn0.ykMbfFU-D0Pl3R6hOx3shUBD1N-AjNmTeeVO8vvdN08',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NTk4MTgyLCJleHAiOjE3MTgxOTAxODJ9.6kqf8x8c91NFkfM6zKkcMe9B9Io4ef-YKyt1NHUWtwI',
       });
       console.log(data);
       setResult(data.toString());
@@ -587,6 +611,7 @@ export default function App() {
 
     console.log('adfsdvjksdvjkdjkvda');
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -648,6 +673,14 @@ export default function App() {
         <Button
           title="Get Tds Certificate Files"
           onPress={get_Tds_Certicate_Files}
+        />
+        <Button
+          title="Get get_Scheme_File_List"
+          onPress={get_Scheme_File_List}
+        />
+        <Button
+          title="Get_Primary_Scheme_File_List "
+          onPress={Get_Primary_Scheme_File_List}
         />
       </View>
     </ScrollView>

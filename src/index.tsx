@@ -147,3 +147,7 @@ export function getTdsCerticateFiles(requestData: any): Promise<any> {
   console.log('inside getSchemeFileList', requestData);
   return VgRetailerSdk.getTdsCerticateFiles(requestData);
 }
+
+export function GetPrimarySchemeFileList(): Promise<any> {
+  return VgRetailerSdk.GetPrimarySchemeFileList();
+}

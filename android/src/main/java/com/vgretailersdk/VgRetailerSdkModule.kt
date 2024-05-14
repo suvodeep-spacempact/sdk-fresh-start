@@ -2465,6 +2465,79 @@ fun getTdsCerticateFiles(requestData: ReadableMap,promise: Promise) {
     }
 }
 
+@ReactMethod
+fun GetPrimarySchemeFileList(promise: Promise){
+  try{
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      
+    val stringRequest = object : StringRequest(
+        Method.GET, baseurl+"/schemes/getActiveSchemeOffers",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          Log.d("b","error is in error listnere $error")
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          Log.d("b","error is in error listnere $gson")
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
+    }
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
+  }catch(error:Exception){
+    Log.d("b","$error")
+    if(error is RegenerateAccessTokenError){
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+      jsonObject.put("code", 440)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    }
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "Internal Server Error.")
+    jsonObject.put("code", 500)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)
+  } 
+}
+
 
 
 
