@@ -40,13 +40,13 @@ export default function App() {
   async function bankdetails() {
     try {
       let data = await verifyBankDetails({
-        "bankIfsc": "PUNB0601500",
-        "bankAccNo": "6015001500010225",
-        "bankAccHolderName": "",
-        "bankAccType": "",
-        "bankNameAndBranch": "",
-        "checkPhoto": ""
-    });
+        bankIfsc: 'PUNB0601500',
+        bankAccNo: '6015001500010225',
+        bankAccHolderName: '',
+        bankAccType: '',
+        bankNameAndBranch: '',
+        checkPhoto: '',
+      });
       console.log(typeof data, '****************');
       console.log(data, '---------------');
       console.log(data, '>>>>>>>>>>>>>>>>');
@@ -60,11 +60,11 @@ export default function App() {
   async function userRewardHistory() {
     try {
       let data = await rewardPointsHistory({
-        "mode" : ["paytm"], 
-       "status" : [],
-        "fromDate" : "2022-09-01",
-        "toDate" : "2022-09-30"
-    });
+        mode: ['paytm'],
+        status: [],
+        fromDate: '2022-09-01',
+        toDate: '2022-09-30',
+      });
       console.log(data, '>>>>>>>>>>>>>>>>');
       setResult(data.toString());
     } catch (err) {
@@ -133,7 +133,7 @@ export default function App() {
         scanType: '',
         fromDate: '2021-10-10',
         couponCode: '',
-        toDate:'2021-10-11'
+        toDate: '2021-10-11',
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -235,7 +235,7 @@ export default function App() {
   async function get_Eligible_Products() {
     try {
       let data = await getEligibleProducts({
-        "categoryId":"",
+        categoryId: '',
         schemeId: 'VGSCH4E8FB',
       });
       console.log(data, '--------------');
@@ -598,7 +598,7 @@ export default function App() {
           },
         })
           .then((data: any) => {
-            console.log(data)
+            console.log(data);
             setResult(data.toString());
           })
           .catch((er) => {
