@@ -15,7 +15,7 @@ import {
   registerWarranty,
   getEligibleProducts,
   //getComboSlabSchemes,
-  getSlabView,
+  getSchemeSlabBasedSlab,
   RewardsPoints,
   getSlabBasedSchemes,
   getCrossSchemesDetails,
@@ -23,7 +23,8 @@ import {
   registerCustomer,
   processForPin,
   processCoupon,
-  getCategoryProductDetails,
+  getProductCrossSellScheme,
+  getProductSlabBasedScheme,
   bankTransfer,
   scanIn,
   getFile,
@@ -31,6 +32,9 @@ import {
   getTdsCertificate,
   getSchemeFileList,
   GetPrimarySchemeFileList,
+  getSchemeCrossBasedSlab,
+  getCurrentSlabOnSlabBased,
+  getCurrentSlabOnCrossSell,
 } from 'react-native-vg-retailer-sdk';
 
 export default function App() {
@@ -57,6 +61,26 @@ export default function App() {
     }
   }
 
+  async function get_Current_Slab_On_Slab_Based() {
+    try {
+      let data = await getCurrentSlabOnSlabBased({ schemeCode: 'VGSCHA3025' });
+      console.log(data, '>>>>>>>>>>>>>>>>');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err);
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_Current_Slab_On_Cross_Sell() {
+    try {
+      let data = await getCurrentSlabOnCrossSell({ schemeCode: 'VGSCH6CD58' });
+      console.log(data, '>>>>>>>>>>>>>>>>');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err);
+      setResult((err as Error).toString());
+    }
+  }
   async function userRewardHistory() {
     try {
       let data = await rewardPointsHistory({
@@ -259,6 +283,7 @@ export default function App() {
     try {
       let data = await getCrossSchemesDetails({
         categoryIds: [],
+        subCategoryIds: [8],
         endDate: '',
         fromDate: '',
         status: '',
@@ -274,6 +299,7 @@ export default function App() {
     try {
       let data = await getSlabBasedSchemes({
         categoryIds: [],
+        subCategoryIds: [8],
         endDate: '',
         fromDate: '',
         status: '',
@@ -285,9 +311,19 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
-  async function get_Slab_View() {
+  async function get_Scheme_Slab_Based_Slab() {
     try {
-      let data = await getSlabView({ schemeId: 'VGSCHFC60D' });
+      let data = await getSchemeSlabBasedSlab({ schemeId: 'VGSCH4E8FB' });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_Scheme_Cross_Based_Slab() {
+    try {
+      let data = await getSchemeCrossBasedSlab({ schemeId: 'VGSCHFC60D' });
       console.log(data, '--------------');
       setResult(data.toString());
     } catch (err) {
@@ -451,12 +487,26 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
-  async function get_Category_Product_Details() {
+  async function get_Product_Slab_Sell_Scheme() {
     try {
-      let data = await getCategoryProductDetails({
-        subCategory: '3',
-        category: '',
-        skuId: '',
+      let data = await getProductSlabBasedScheme({
+        subCategory: [],
+        category: [],
+        schemeNumber: 'VGSCH6CD58',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_Product_Cross_Sell_Scheme() {
+    try {
+      let data = await getProductCrossSellScheme({
+        subCategory: [],
+        category: [],
+        schemeNumber: 'VGSCH6CD58',
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -570,7 +620,7 @@ export default function App() {
       let data = await InitializeSDK({
         baseurl: 'http://34.93.239.251:5000/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NjY5NTI2LCJleHAiOjE3MTgyNjE1MjZ9.1tUgEOGEThmYxyR1gVzNeSLIyI5WVBIfY6X5A-l3oiw',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTU5NTI3NjMsImV4cCI6MTcxODU0NDc2M30.bpk7kftNlJ9sxoNvBKQ5Kie-KNZMJY6TWZ_p3SJVPd4',
         refreshtoken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NjY5NTI2LCJleHAiOjE3MTgyNjE1MjZ9.H5NDmlhRgyGfbHYUYcr346m6UMIFqccudLc2jQsMvAE',
       });
@@ -644,7 +694,14 @@ export default function App() {
         title="get Combo slab scheme"
         onPress={get_ComboSlab_Schemes}
       /> */}
-        <Button title="Get Slab View" onPress={get_Slab_View} />
+        <Button
+          title="get_Scheme_Slab_Based_Slab"
+          onPress={get_Scheme_Slab_Based_Slab}
+        />
+        <Button
+          title="get_Scheme_Cross_Based_Slab"
+          onPress={get_Scheme_Cross_Based_Slab}
+        />
         <Button title="Get Reward Points" onPress={reward_points} />
         <Button
           title="Get Combo based schemes "
@@ -663,8 +720,12 @@ export default function App() {
         <Button title="Process for pin" onPress={process_For_Pin} />
         <Button title="Process Coupon" onPress={process_Coupon} />
         <Button
-          title="Get Category Product details"
-          onPress={get_Category_Product_Details}
+          title="get_Product_Cross_Sell_Scheme"
+          onPress={get_Product_Cross_Sell_Scheme}
+        />
+        <Button
+          title="get_Product_Slab_Sell_Scheme"
+          onPress={get_Product_Slab_Sell_Scheme}
         />
         <Button title="Bank Transfer" onPress={bank_Transfer} />
         <Button title="Scan In" onPress={scan_In} />
@@ -683,6 +744,14 @@ export default function App() {
         <Button
           title="Get_Primary_Scheme_File_List "
           onPress={Get_Primary_Scheme_File_List}
+        />
+        <Button
+          title="get_Current_Slab_On_Cross_Sell "
+          onPress={get_Current_Slab_On_Cross_Sell}
+        />
+        <Button
+          title="get_Current_Slab_On_Slab_Based "
+          onPress={get_Current_Slab_On_Slab_Based}
         />
       </View>
     </ScrollView>

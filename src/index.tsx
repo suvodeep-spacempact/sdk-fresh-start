@@ -80,9 +80,13 @@ export function getEligibleProducts(requestData: any): Promise<any> {
   return VgRetailerSdk.getEligibleProducts(requestData);
 }
 
-export function getSlabView(requestData: any): Promise<any> {
+export function getSchemeSlabBasedSlab(requestData: any): Promise<any> {
   console.log('inside requestData function', requestData);
-  return VgRetailerSdk.getSlabView(requestData);
+  return VgRetailerSdk.getSchemeSlabBasedSlab(requestData);
+}
+export function getSchemeCrossBasedSlab(requestData: any): Promise<any> {
+  console.log('inside requestData function', requestData);
+  return VgRetailerSdk.getSchemeCrossBasedSlab(requestData);
 }
 
 export function RewardsPoints(): Promise<any> {
@@ -114,9 +118,13 @@ export function processCoupon(requestData: any): Promise<any> {
   console.log('inside Reward points function');
   return VgRetailerSdk.processCoupon(requestData);
 }
-export function getCategoryProductDetails(requestData: any): Promise<any> {
+export function getProductCrossSellScheme(requestData: any): Promise<any> {
   console.log('inside Reward points function');
-  return VgRetailerSdk.getCategoryProductDetails(requestData);
+  return VgRetailerSdk.getProductCrossSellScheme(requestData);
+}
+export function getProductSlabBasedScheme(requestData: any): Promise<any> {
+  console.log('inside Reward points function');
+  return VgRetailerSdk.getProductSlabBasedScheme(requestData);
 }
 export function bankTransfer(requestData: any): Promise<any> {
   console.log('inside Reward points function');
@@ -150,4 +158,12 @@ export function getTdsCertificate(requestData: any): Promise<any> {
 
 export function GetPrimarySchemeFileList(): Promise<any> {
   return VgRetailerSdk.GetPrimarySchemeFileList();
+}
+export function getCurrentSlabOnSlabBased(requestData: any): Promise<any> {
+  console.log('inside get current slab on slab based function');
+  return VgRetailerSdk.getCurrentSlabOnSlabBased(requestData);
+}
+export function getCurrentSlabOnCrossSell(requestData: any): Promise<any> {
+  console.log('inside get current slab on slab based function');
+  return VgRetailerSdk.getCurrentSlabOnCrossSell(requestData);
 }

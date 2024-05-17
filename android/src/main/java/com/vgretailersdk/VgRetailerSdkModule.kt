@@ -37,6 +37,7 @@ import com.vgretailersdk.InitializeSDK
 import com.vgretailersdk.GenerateAccessToken
 import com.vgretailersdk.RegenerateAccessTokenError
 import com.vgretailersdk.ProcessForPinRequest
+import com.vgretailersdk.getProductDetailsRequest
 import com.vgretailersdk.FileUploadData
 import com.vgretailersdk.SDKConfig
 import com.vgretailersdk.UserData
@@ -1102,8 +1103,112 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
     
   }
 
+// @ReactMethod
+// fun getComboSlabSchemes(requestData: ReadableMap,promise: Promise){
+//   try{
+//     val paperDbObject = PaperDbFunctions();
+//     val token = paperDbObject.getAccessToken();
+//     val refreshToken = paperDbObject.getRefreshToken();
+//     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+//     if (isTokenExpired(token)) {
+//       refresAccessTokenObject.refreshAccessToken()
+//     }
+//     val accessToken = paperDbObject.getAccessToken();
+//     val baseurl = paperDbObject.getBaseURL();
+//       val context = reactApplicationContext
+//       val queue = Volley.newRequestQueue(context)
+//       val categoryIdsArray: Array<Int> = if (requestData.hasKey("categoryIds")) {
+//         val modeReadableArray = requestData.getArray("categoryIds")
+//         val modeList = mutableListOf<Int>()
+//         for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+//             modeList.add(modeReadableArray?.getInt(i) ?: 0)
+//         }
+//         modeList.toTypedArray()
+//     } else {
+//         emptyArray()
+//     }
+//     val categoryIdsArray: Array<Int> = if (requestData.hasKey("categoryIds")) {
+//       val modeReadableArray = requestData.getArray("categoryIds")
+//       val modeList = mutableListOf<Int>()
+//       for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+//           modeList.add(modeReadableArray?.getInt(i) ?: 0)
+//       }
+//       modeList.toTypedArray()
+//   } else {
+//       emptyArray()
+//   }
+//       val requestBody = GetComboSlabSchemesRequest(
+//         categoryIdsArray,
+//         requestData.getString("endDate") ?: "",
+//         requestData.getString("fromDate") ?: "",
+//         requestData.getString("status") ?: ""
+//     )
+//     val stringRequest = object : StringRequest(
+//         Method.POST, baseurl+"/schemes/getComboSlabSchemes",
+//         Response.Listener { response ->
+//             promise.resolve(response)
+//         },
+//         Response.ErrorListener { error ->
+//           val errorCode = error.networkResponse?.statusCode
+//           val gson = Gson().toJson(error.networkResponse)
+//           if(errorCode == 403 || errorCode == 401){
+//             val jsonObject = JSONObject()
+//             jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+//             jsonObject.put("code", 440)
+//             val jsonString = jsonObject.toString()
+//             promise.reject(jsonString)
+//           }else if(errorCode == 440){
+//             val jsonObject = JSONObject()
+//             jsonObject.put("message", "Please retry the action")
+//             jsonObject.put("code", 440)
+//             val jsonString = jsonObject.toString()
+//             promise.reject(jsonString)
+//           }
+//           val jsonObject = JSONObject()
+//           jsonObject.put("message", "Internal Server Error.")
+//           jsonObject.put("code", 500)
+//           val jsonString = jsonObject.toString()
+//           promise.reject(jsonString)
+//         }) {
+//         override fun getBody(): ByteArray {
+//             val gson = Gson()
+//             val jsonBody = gson.toJson(requestBody)
+//             return jsonBody.toByteArray()
+//         }
+//         override fun getBodyContentType(): String {
+//             return "application/json"
+//         }
+//         override fun getHeaders(): Map<String, String> {
+//             val headers = HashMap<String, String>()
+//             headers["Authorization"] = "Bearer $accessToken"
+//             return headers
+//         }
+//     }
+//     stringRequest.retryPolicy = DefaultRetryPolicy(
+//         50000,
+//         DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//     )
+//     queue.add(stringRequest)
+//   }catch(error:Exception){
+//     if(error is RegenerateAccessTokenError){
+//       val jsonObject = JSONObject()
+//       jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+//       jsonObject.put("code", 440)
+//       val jsonString = jsonObject.toString()
+//       promise.reject(jsonString)
+//     }
+//     val jsonObject = JSONObject()
+//     jsonObject.put("message", "Internal Server Error.")
+//     jsonObject.put("code", 500)
+//     val jsonString = jsonObject.toString()
+//     promise.reject(jsonString)
+//   }
+// }
+
+
 @ReactMethod
-fun getComboSlabSchemes(requestData: ReadableMap,promise: Promise){
+fun getCurrentSlabOnSlabBased(requestData: ReadableMap,promise: Promise){
   try{
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
@@ -1116,24 +1221,94 @@ fun getComboSlabSchemes(requestData: ReadableMap,promise: Promise){
     val baseurl = paperDbObject.getBaseURL();
       val context = reactApplicationContext
       val queue = Volley.newRequestQueue(context)
-      val categoryIdsArray: Array<Int> = if (requestData.hasKey("categoryIds")) {
-        val modeReadableArray = requestData.getArray("categoryIds")
-        val modeList = mutableListOf<Int>()
-        for (i in 0 until (modeReadableArray?.size() ?: 0)) {
-            modeList.add(modeReadableArray?.getInt(i) ?: 0)
+      val requestBody = JSONObject()
+      requestBody.put("schemeCode", requestData.getString("schemeCode"))
+      val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/schemes/getUserCurrentSlab/slabBased",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          Log.d("c","error is $gson")
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getBody(): ByteArray {
+            // val gson = Gson()
+            // val jsonBody = gson.toJson(requestBody)
+            // Log.d("d","jsonboduy is $jsonBody")
+            // return jsonBody.toByteArray()
+            return requestBody.toString().toByteArray()
         }
-        modeList.toTypedArray()
-    } else {
-        emptyArray()
+        override fun getBodyContentType(): String {
+            return "application/json"
+        }
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
     }
-      val requestBody = GetComboSlabSchemesRequest(
-        categoryIdsArray,
-        requestData.getString("endDate") ?: "",
-        requestData.getString("fromDate") ?: "",
-        requestData.getString("status") ?: ""
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
     )
-    val stringRequest = object : StringRequest(
-        Method.POST, baseurl+"/schemes/getComboSlabSchemes",
+    queue.add(stringRequest)
+
+  }catch(error:Exception){
+    Log.d("c","error is $error")
+    if(error is RegenerateAccessTokenError){
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+      jsonObject.put("code", 440)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    }
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "Internal Server Error.")
+    jsonObject.put("code", 500)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)
+  }
+}
+
+@ReactMethod
+fun getCurrentSlabOnCrossSell(requestData: ReadableMap,promise: Promise){
+  try{
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      val requestBody = JSONObject()
+      requestBody.put("schemeCode", requestData.getString("schemeCode"))
+      val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/schemes/getUserCurrentSlab/comboBased",
         Response.Listener { response ->
             promise.resolve(response)
         },
@@ -1160,9 +1335,11 @@ fun getComboSlabSchemes(requestData: ReadableMap,promise: Promise){
           promise.reject(jsonString)
         }) {
         override fun getBody(): ByteArray {
-            val gson = Gson()
-            val jsonBody = gson.toJson(requestBody)
-            return jsonBody.toByteArray()
+            // val gson = Gson()
+            // val jsonBody = gson.toJson(requestBody)
+            // Log.d("d","jsonboduy is $jsonBody")
+            // return jsonBody.toByteArray()
+            return requestBody.toString().toByteArray()
         }
         override fun getBodyContentType(): String {
             return "application/json"
@@ -1179,6 +1356,7 @@ fun getComboSlabSchemes(requestData: ReadableMap,promise: Promise){
         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
     )
     queue.add(stringRequest)
+
   }catch(error:Exception){
     if(error is RegenerateAccessTokenError){
       val jsonObject = JSONObject()
@@ -1195,8 +1373,9 @@ fun getComboSlabSchemes(requestData: ReadableMap,promise: Promise){
   }
 }
 
+
 @ReactMethod
-fun getSlabView(requestData: ReadableMap,promise: Promise){
+fun getSchemeSlabBasedSlab(requestData: ReadableMap,promise: Promise){
   try{
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
@@ -1212,7 +1391,88 @@ fun getSlabView(requestData: ReadableMap,promise: Promise){
       val requestBody = JSONObject()
       requestBody.put("schemeId", requestData.getString("schemeId"))
       val stringRequest = object : StringRequest(
-        Method.POST, baseurl+"/schemes/getSlabView",
+        Method.POST, baseurl+"/schemes/getSlabView/slabDetails",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getBody(): ByteArray {
+            // val gson = Gson()
+            // val jsonBody = gson.toJson(requestBody)
+            // Log.d("d","jsonboduy is $jsonBody")
+            // return jsonBody.toByteArray()
+            return requestBody.toString().toByteArray()
+        }
+        override fun getBodyContentType(): String {
+            return "application/json"
+        }
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
+    }
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
+
+  }catch(error:Exception){
+    if(error is RegenerateAccessTokenError){
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+      jsonObject.put("code", 440)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)
+    }
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "Internal Server Error.")
+    jsonObject.put("code", 500)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)
+  }
+}
+@ReactMethod
+fun getSchemeCrossBasedSlab(requestData: ReadableMap,promise: Promise){
+  try{
+    val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      val requestBody = JSONObject()
+      requestBody.put("schemeId", requestData.getString("schemeId"))
+      val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/schemes/getSlabView/comboDetails",
         Response.Listener { response ->
             promise.resolve(response)
         },
@@ -1302,8 +1562,20 @@ fun getCrossSchemesDetails(requestData: ReadableMap,promise: Promise){
     } else {
         emptyArray()
     }
+    val subCategoryIdsArray: Array<Int> = if (requestData.hasKey("subCategoryIds")) {
+      val modeReadableArray = requestData.getArray("subCategoryIds")
+      val modeList = mutableListOf<Int>()
+      for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+          modeList.add(modeReadableArray?.getInt(i) ?: 0)
+      }
+      modeList.toTypedArray()
+  } else {
+      emptyArray()
+  }
+
       val requestBody = GetComboSlabSchemesRequest(
         categoryIdsArray,
+        subCategoryIdsArray,
         requestData.getString("endDate") ?: "",
         requestData.getString("fromDate") ?: "",
         requestData.getString("status") ?: ""
@@ -1395,8 +1667,19 @@ fun getSlabBasedSchemes(requestData: ReadableMap,promise: Promise){
     } else {
         emptyArray()
     }
+    val subCategoryIdsArray: Array<Int> = if (requestData.hasKey("subCategoryIds")) {
+      val modeReadableArray = requestData.getArray("subCategoryIds")
+      val modeList = mutableListOf<Int>()
+      for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+          modeList.add(modeReadableArray?.getInt(i) ?: 0)
+      }
+      modeList.toTypedArray()
+  } else {
+      emptyArray()
+  }
       val requestBody = GetComboSlabSchemesRequest(
         categoryIdsArray,
+        subCategoryIdsArray,
         requestData.getString("endDate") ?: "",
         requestData.getString("fromDate") ?: "",
         requestData.getString("status") ?: ""
@@ -1890,9 +2173,9 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
     promise.reject(jsonString)
   } 
 }
-
+//getCategoryProductDetails
 @ReactMethod 
-  fun getCategoryProductDetails(requestData: ReadableMap,promise: Promise){
+  fun getProductCrossSellScheme(requestData: ReadableMap,promise: Promise){
     try{
       val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
@@ -1905,14 +2188,150 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
     val baseurl = paperDbObject.getBaseURL();
       val context = reactApplicationContext
       val queue = Volley.newRequestQueue(context)
-      val requestBody = JSONObject()
+      val categoryIdsArray: Array<Int> = if (requestData.hasKey("category")) {
+        val modeReadableArray = requestData.getArray("category")
+        val modeList = mutableListOf<Int>()
+        for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+            modeList.add(modeReadableArray?.getInt(i) ?: 0)
+        }
+        modeList.toTypedArray()
+    } else {
+        emptyArray()
+    }
+    val subCategoryIdsArray: Array<Int> = if (requestData.hasKey("subCategory")) {
+      val modeReadableArray = requestData.getArray("subCategory")
+      val modeList = mutableListOf<Int>()
+      for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+          modeList.add(modeReadableArray?.getInt(i) ?: 0)
+      }
+      modeList.toTypedArray()
+  } else {
+      emptyArray()
+  }
+      val requestBody = getProductDetailsRequest(
+        categoryIdsArray,
+        subCategoryIdsArray,
+        requestData.getString("schemeNumber")?: "",
+        requestData.getString("PartNumber")?: ""
+      )
       Log.d("b","$requestBody")
-      requestBody.put("subCategory", requestData.getString("subCategory"))
-      requestBody.put("category", requestData.getString("category"))
-      requestBody.put("skuId", requestData.getString("skuId"))
       Log.d("b"," request body is $requestBody")
       val stringRequest = object : StringRequest(
-        Method.POST, baseurl+"/product/getCategoryProductDetails",
+        Method.POST, baseurl+"/product/getCategoryProductDetails/comboBased",
+        Response.Listener { response ->
+            promise.resolve(response)
+        },
+        Response.ErrorListener { error ->
+          val errorCode = error.networkResponse?.statusCode
+          val gson = Gson().toJson(error.networkResponse)
+          Log.d("b","error is in requst $gson")
+          if(errorCode == 403 || errorCode == 401){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }else if(errorCode == 440){
+            val jsonObject = JSONObject()
+            jsonObject.put("message", "Please retry the action")
+            jsonObject.put("code", 440)
+            val jsonString = jsonObject.toString()
+            promise.reject(jsonString)
+          }
+          val jsonObject = JSONObject()
+          jsonObject.put("message", "Internal Server Error.")
+          jsonObject.put("code", 500)
+          val jsonString = jsonObject.toString()
+          promise.reject(jsonString)
+        }) {
+        override fun getBody(): ByteArray {
+          val gson = Gson()
+          val jsonBody = gson.toJson(requestBody)
+          return jsonBody.toByteArray()
+        }
+        override fun getBodyContentType(): String {
+            return "application/json"
+        }
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Authorization"] = "Bearer $accessToken"
+            return headers
+        }
+      }
+    stringRequest.retryPolicy = DefaultRetryPolicy(
+        50000,
+        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+    )
+    queue.add(stringRequest)
+
+    }catch(error:Exception){
+      Log.d("b","error is ------------- $error")
+      if(error is RegenerateAccessTokenError){
+        val jsonObject = JSONObject()
+        jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+        jsonObject.put("code", 440)
+        val jsonString = jsonObject.toString()
+        promise.reject(jsonString)
+      }
+      val jsonObject = JSONObject()
+      jsonObject.put("message", "Internal Server Error.")
+      jsonObject.put("code", 500)
+      val jsonString = jsonObject.toString()
+      promise.reject(jsonString)      
+    }
+    
+  }
+
+//getCategoryProductDetails
+@ReactMethod 
+  fun getProductSlabBasedScheme(requestData: ReadableMap,promise: Promise){
+    try{
+      val paperDbObject = PaperDbFunctions();
+    val token = paperDbObject.getAccessToken();
+    val refreshToken = paperDbObject.getRefreshToken();
+    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
+    if (isTokenExpired(token)) {
+      refresAccessTokenObject.refreshAccessToken()
+    }
+    val accessToken = paperDbObject.getAccessToken();
+    val baseurl = paperDbObject.getBaseURL();
+      val context = reactApplicationContext
+      val queue = Volley.newRequestQueue(context)
+      //val requestBody = JSONObject()
+      val categoryIdsArray: Array<Int> = if (requestData.hasKey("category")) {
+        val modeReadableArray = requestData.getArray("category")
+        val modeList = mutableListOf<Int>()
+        for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+            modeList.add(modeReadableArray?.getInt(i) ?: 0)
+        }
+        modeList.toTypedArray()
+    } else {
+        emptyArray()
+    }
+    val subCategoryIdsArray: Array<Int> = if (requestData.hasKey("subCategory")) {
+      val modeReadableArray = requestData.getArray("subCategory")
+      val modeList = mutableListOf<Int>()
+      for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+          modeList.add(modeReadableArray?.getInt(i) ?: 0)
+      }
+      modeList.toTypedArray()
+  } else {
+      emptyArray()
+  }
+      val requestBody = getProductDetailsRequest(
+        categoryIdsArray,
+        subCategoryIdsArray,
+        requestData.getString("schemeNumber")?: "",
+        requestData.getString("PartNumber")?: ""
+      )
+      Log.d("b","$requestBody")
+      // requestBody.put("subCategory", requestData.getString("subCategory"))
+      // requestBody.put("category", requestData.getString("category"))
+      // requestBody.put("skuId", requestData.getString("skuId"))
+      Log.d("b"," request body is $requestBody")
+      val stringRequest = object : StringRequest(
+        Method.POST, baseurl+"/product/getCategoryProductDetails/slabBased",
         Response.Listener { response ->
             promise.resolve(response)
         },
@@ -1939,7 +2358,9 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
           promise.reject(jsonString)
         }) {
         override fun getBody(): ByteArray {
-            return requestBody.toString().toByteArray()
+          val gson = Gson()
+          val jsonBody = gson.toJson(requestBody)
+          return jsonBody.toByteArray()
         }
         override fun getBodyContentType(): String {
             return "application/json"
