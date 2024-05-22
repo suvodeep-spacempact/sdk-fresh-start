@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-
 import { launchImageLibrary } from 'react-native-image-picker';
 import {
   StyleSheet,
@@ -68,7 +67,6 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
-
 
   async function get_Current_Slab_On_Slab_Based() {
     try {
@@ -373,34 +371,34 @@ export default function App() {
     try {
       let data = await registerCustomer({
         nameTitle: '',
-        contactNo: '9435731954',
-        name: 'B k singh',
-        email: 'madhuranjankumar1983.mk@gmail.com',
-        currAdd: 'Muzaffarpur',
-        alternateNo: '',
-        state: 'Bihar',
-        district: 'Muzaffarpur',
-        city: 'Muzaffarpur',
-        landmark: '',
-        pinCode: '843108',
-        dealerName: 'Madhu Ranjan Kumar',
-        dealerAdd: '',
-        dealerState: 'Bihar',
-        dealerDist: 'Muzaffarpur',
-        dealerCity: 'Muzaffarpur',
-        dealerPinCode: '843108',
-        dealerNumber: '9934674364',
-        addedBy: '',
-        billDetails: '',
+        contactNo: '6565656565',
+        name: 'SHIVAKAR',
+        email: 'test65@gmail.com',
+        currAdd: 'Central Delhi',
+        alternateNo: '7575757575',
+        state: 'Delhi',
+        district: 'Delhi',
+        city: 'Central Delhi',
+        landmark: 'Delhi',
+        pinCode: '110006',
+        dealerName: 'Mohit test',
+        dealerAdd: 'Central Delhi',
+        dealerState: 'Delhi',
+        dealerDist: 'Central Delhi',
+        dealerCity: 'Central Delhi',
+        dealerPinCode: '110006',
+        dealerNumber: '9873608820',
+        addedBy: 22390, //Retailer UserId
+        billDetails: '4b34eb9a-6e4c-4314-b408-31f6623b0a71.jpg',
         warrantyPhoto: '4b34eb9a-6e4c-4314-b408-31f6623b0a71.jpg',
-        sellingPrice: '',
+        sellingPrice: '1500',
         emptStr: '',
         cresp: {
           custIdForProdInstall: '',
           modelForProdInstall: '',
           errorCode: 0,
           errorMsg: '',
-          statusType: '',
+          statusType: 1,
           balance: '',
           currentPoints: '',
           couponPoints: '',
@@ -411,36 +409,36 @@ export default function App() {
           clubPoints: '',
           scanDate: '',
           scanStatus: '',
-          copuonCode: '8467909055761994',
-          bitEligibleScratchCard: 1,
-          pardId: '',
-          partNumber: '',
+          copuonCode: '5362224187701942',
+          bitEligibleScratchCard: false,
+          partId: '141',
+          pardId: 123,
+          partNumber: '3002751',
           partName: '',
-          couponCode: '',
-          skuDetail: 'VG 400',
-          purchaseDate: '',
-          categoryId: '',
-          category: '',
+          skuDetail: 'JAADOO1050',
+          purchaseDate: '2024-05-11', //also Manufacturing Date
+          categoryId: '1',
+          category: 'Digital Ups',
           anomaly: 0,
-          warranty: '183',
+          warranty: '365',
         },
         selectedProd: {
           specs: '',
           pointsFormat: '',
           product: '',
           productName: '',
-          productCategory: '',
-          productCode: '',
+          productCategory: 'Digital Ups',
+          productCode: '3002751',
           points: 0.0,
           imageUrl: '',
-          userId: '',
+          userId: '22390',
           productId: '',
           paytmMobileNo: '',
         },
-        latitude: '',
-        longitude: '',
-        geolocation: '',
-        dealerCategory: '',
+        latitude: '28.6798562',
+        longitude: '77.0622139',
+        geolocation: 'Central Delhi',
+        dealerCategory: 'Customer',
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -586,10 +584,8 @@ export default function App() {
   async function get_Tds_Certicate_Files() {
     try {
       let data = await getTdsCertificate({
-        fileId: '1',
-        fiscalStartYear: '',
-        fiscalEndYear: '',
-        quater: '',
+        quater: ['Quarter 2'],
+        fiscalYear: ['2024-2026', '2022-2023'],
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -628,9 +624,9 @@ export default function App() {
   async function intializesdk() {
     try {
       let data = await InitializeSDK({
-        baseurl: 'https://retsdk.4test.infos/vguard/api',
+        baseurl: 'http://35.207.195.181:5000/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTYyOTI2MjYsImV4cCI6MTcxODg4NDYyNn0.0nVrd09e5lo9ZC7E_ewn6nOQVMP6n_0HWCvF6wpokrk',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTYzNzE5ODQsImV4cCI6MTcxODk2Mzk4NH0.s1F5-z5kDjekOEvtG8bjeP9RTx28gn-Bu71xD_sr1BE',
         refreshtoken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NjY5NTI2LCJleHAiOjE3MTgyNjE1MjZ9.H5NDmlhRgyGfbHYUYcr346m6UMIFqccudLc2jQsMvAE',
       });
@@ -714,67 +710,67 @@ export default function App() {
         title="get Combo slab scheme"
         onPress={get_ComboSlab_Schemes}
       /> */}
-        <Button
-          title="get_Scheme_Slab_Based_Slab"
-          onPress={get_Scheme_Slab_Based_Slab}
-        />
-        <Button
-          title="get_Scheme_Cross_Based_Slab"
-          onPress={get_Scheme_Cross_Based_Slab}
-        />
-        <Button title="Get Reward Points" onPress={reward_points} />
-        <Button
-          title="Get Combo based schemes "
-          onPress={get_Combo_Based_Schemes}
-        />
-        <Button
-          title="Get slab based schemes "
-          onPress={get_Slab_Based_Schemes}
-        />
-        <Button title="Get Reward Points" onPress={reward_points} />
-        <Button
-          title="validate retailer coupon"
-          onPress={validate_Retailer_Coupon}
-        />
-        <Button title="register customer" onPress={register_Customer} />
-        <Button title="Process for pin" onPress={process_For_Pin} />
-        <Button title="Process Coupon" onPress={process_Coupon} />
-        <Button
-          title="get_Product_Cross_Sell_Scheme"
-          onPress={get_Product_Cross_Sell_Scheme}
-        />
-        <Button
-          title="get_Product_Slab_Sell_Scheme"
-          onPress={get_Product_Slab_Sell_Scheme}
-        />
-        <Button title="Bank Transfer" onPress={bank_Transfer} />
-        <Button title="Scan In" onPress={scan_In} />
-        <Button title="Get File" onPress={get_File} />
-        <Button title="Initialize SDK" onPress={intializesdk} />
-        <Button title="Clear" onPress={() => setResult('')} />
-        <Button title="Test" onPress={handleCameraUpload} />
-        <Button
-          title="Get Tds Certificate Files"
-          onPress={get_Tds_Certicate_Files}
-        />
-        <Button
-          title="Get get_Scheme_File_List"
-          onPress={get_Scheme_File_List}
-        />
-        <Button
-          title="Get_Primary_Scheme_File_List "
-          onPress={Get_Primary_Scheme_File_List}
-        />
-        <Button
-          title="get_Current_Slab_On_Cross_Sell "
-          onPress={get_Current_Slab_On_Cross_Sell}
-        />
-        <Button
-          title="get_Current_Slab_On_Slab_Based "
-          onPress={get_Current_Slab_On_Slab_Based}
-        />
-      </View>
-    </ScrollView>
+          <Button
+            title="get_Scheme_Slab_Based_Slab"
+            onPress={get_Scheme_Slab_Based_Slab}
+          />
+          <Button
+            title="get_Scheme_Cross_Based_Slab"
+            onPress={get_Scheme_Cross_Based_Slab}
+          />
+          <Button title="Get Reward Points" onPress={reward_points} />
+          <Button
+            title="Get Combo based schemes "
+            onPress={get_Combo_Based_Schemes}
+          />
+          <Button
+            title="Get slab based schemes "
+            onPress={get_Slab_Based_Schemes}
+          />
+          <Button title="Get Reward Points" onPress={reward_points} />
+          <Button
+            title="validate retailer coupon"
+            onPress={validate_Retailer_Coupon}
+          />
+          <Button title="register customer" onPress={register_Customer} />
+          <Button title="Process for pin" onPress={process_For_Pin} />
+          <Button title="Process Coupon" onPress={process_Coupon} />
+          <Button
+            title="get_Product_Cross_Sell_Scheme"
+            onPress={get_Product_Cross_Sell_Scheme}
+          />
+          <Button
+            title="get_Product_Slab_Sell_Scheme"
+            onPress={get_Product_Slab_Sell_Scheme}
+          />
+          <Button title="Bank Transfer" onPress={bank_Transfer} />
+          <Button title="Scan In" onPress={scan_In} />
+          <Button title="Get File" onPress={get_File} />
+          <Button title="Initialize SDK" onPress={intializesdk} />
+          <Button title="Clear" onPress={() => setResult('')} />
+          <Button title="Test" onPress={handleCameraUpload} />
+          <Button
+            title="Get Tds Certificate Files"
+            onPress={get_Tds_Certicate_Files}
+          />
+          <Button
+            title="Get get_Scheme_File_List"
+            onPress={get_Scheme_File_List}
+          />
+          <Button
+            title="Get_Primary_Scheme_File_List "
+            onPress={Get_Primary_Scheme_File_List}
+          />
+          <Button
+            title="get_Current_Slab_On_Cross_Sell "
+            onPress={get_Current_Slab_On_Cross_Sell}
+          />
+          <Button
+            title="get_Current_Slab_On_Slab_Based "
+            onPress={get_Current_Slab_On_Slab_Based}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

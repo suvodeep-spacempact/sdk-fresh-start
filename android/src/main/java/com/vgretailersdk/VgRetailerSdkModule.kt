@@ -1924,11 +1924,14 @@ fun registerCustomer(requestData: ReadableMap,promise: Promise){
     val stringRequest = object : StringRequest(
       Method.POST, baseurl+"/product/registerCustomer",
       Response.Listener { response ->
+        Log.d("cat","response is $response")
           promise.resolve(response)
       },
       Response.ErrorListener { error ->
+        Log.d("cat","error is is $error")
         val errorCode = error.networkResponse?.statusCode
         val gson = Gson().toJson(error.networkResponse)
+        Log.d("cat","error is $gson ")
         if(errorCode == 403 || errorCode == 401){
           val jsonObject = JSONObject()
           jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
@@ -1970,7 +1973,7 @@ fun registerCustomer(requestData: ReadableMap,promise: Promise){
   queue.add(stringRequest)
 
   }catch(error: Exception){
-    Log.d("b","$error")
+    Log.d("cat","$error")
     if(error is RegenerateAccessTokenError){
       val jsonObject = JSONObject()
       jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
@@ -2818,21 +2821,42 @@ fun getTdsCertificate(requestData: ReadableMap,promise: Promise) {
     val accessToken = paperDbObject.getAccessToken();
     val context = reactApplicationContext
     val queue = Volley.newRequestQueue(context)
+    val quarterArray: Array<String> = if (requestData.hasKey("quater")) {
+      val modeReadableArray = requestData.getArray("quater")
+      val modeList = mutableListOf<String>()
+      for (i in 0 until (modeReadableArray?.size() ?: 0)) {
+        modeList.add(modeReadableArray?.getString(i) ?: "")
+      }
+      modeList.toTypedArray()
+    } else {
+      emptyArray()
+    }
+
+    val fiscalYearArray: Array<String> = if (requestData.hasKey("fiscalYear")) {
+      val statusReadableArray = requestData.getArray("fiscalYear")
+      val statusList = mutableListOf<String>()
+      for (i in 0 until (statusReadableArray?.size() ?: 0)) {
+        statusList.add(statusReadableArray?.getString(i) ?: "")
+      }
+      statusList.toTypedArray()
+    } else {
+      emptyArray()
+    }
     val request = TdsCertificate(
-      requestData.getString("fileId") ?: "",
-      requestData.getString("fiscalStartYear") ?: "",
-      requestData.getString("fiscalEndYear") ?: "",
-      requestData.getString("quater") ?: "",
+      quarterArray,
+      fiscalYearArray
     )
     val baseurl = paperDbObject.getBaseURL();
     val stringRequest = object : StringRequest(
       Method.POST, baseurl+"/user/tdsCertificate",
       Response.Listener { response ->
+        Log.d("cat","response is $response")
       promise.resolve(response)
       },
       Response.ErrorListener { error ->
         val errorCode = error.networkResponse?.statusCode
         val gson = Gson().toJson(error.networkResponse)
+        Log.d("cat","error is $gson")
         if(errorCode == 403 || errorCode == 401){
           val jsonObject = JSONObject()
           jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
@@ -2871,6 +2895,7 @@ fun getTdsCertificate(requestData: ReadableMap,promise: Promise) {
       )
       queue.add(stringRequest)
     }catch (e: Exception) {
+      Log.d("cat","error is is $e")
       if(e is RegenerateAccessTokenError){
         val jsonObject = JSONObject()
         jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
@@ -2886,6 +2911,8 @@ fun getTdsCertificate(requestData: ReadableMap,promise: Promise) {
       promise.reject(jsonString)
     }
 }
+
+
 
 @ReactMethod
 fun GetPrimarySchemeFileList(promise: Promise){
