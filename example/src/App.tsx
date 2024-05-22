@@ -1,7 +1,15 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, Button, ScrollView } from 'react-native';
+
 import { launchImageLibrary } from 'react-native-image-picker';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import {
   verifyBankDetails,
   rewardPointsHistory,
@@ -61,6 +69,7 @@ export default function App() {
     }
   }
 
+
   async function get_Current_Slab_On_Slab_Based() {
     try {
       let data = await getCurrentSlabOnSlabBased({ schemeCode: 'VGSCHA3025' });
@@ -81,6 +90,7 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
+
   async function userRewardHistory() {
     try {
       let data = await rewardPointsHistory({
@@ -618,9 +628,9 @@ export default function App() {
   async function intializesdk() {
     try {
       let data = await InitializeSDK({
-        baseurl: 'http://34.93.239.251:5000/vguard/api',
+        baseurl: 'https://retsdk.4test.infos/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTU5NTI3NjMsImV4cCI6MTcxODU0NDc2M30.bpk7kftNlJ9sxoNvBKQ5Kie-KNZMJY6TWZ_p3SJVPd4',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTYyOTI2MjYsImV4cCI6MTcxODg4NDYyNn0.0nVrd09e5lo9ZC7E_ewn6nOQVMP6n_0HWCvF6wpokrk',
         refreshtoken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NjY5NTI2LCJleHAiOjE3MTgyNjE1MjZ9.H5NDmlhRgyGfbHYUYcr346m6UMIFqccudLc2jQsMvAE',
       });
@@ -665,32 +675,42 @@ export default function App() {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Button title="Bank details" onPress={bankdetails} />
+    <SafeAreaView>
+      <ScrollView>
+        <View style={styles.container}>
+          <Button title="Bank details" onPress={bankdetails} />
 
-        <Text>Result: {result}</Text>
-        {/* <Button title="Check if user Exists" onPress={userExists} /> */}
-        <Button title="User Reward Historys" onPress={userRewardHistory} />
-        <Button title="Scanned Balance Points" onPress={ScannedBalancePoint} />
-        <Button
-          title="user Scan Out Point Summary"
-          onPress={userScanOutPointSummaryfunction}
-        />
-        <Button title="Get Categories list" onPress={get_Categories_List} />
-        <Button
-          title="Get User Base Points list"
-          onPress={get_User_Base_Points}
-        />
-        <Button title="Get User Scan History" onPress={get_User_Scan_History} />
-        <Button
-          title="Capture Customer Details"
-          onPress={capture_Customer_Details}
-        />
-        <Button title="Register warranty" onPress={register_Warranty} />
-        <Button title="get Eligible Products" onPress={get_Eligible_Products} />
+          <Text>Result: {result}</Text>
+          {/* <Button title="Check if user Exists" onPress={userExists} /> */}
+          <Button title="User Reward Historys" onPress={userRewardHistory} />
+          <Button
+            title="Scanned Balance Points"
+            onPress={ScannedBalancePoint}
+          />
+          <Button
+            title="user Scan Out Point Summary"
+            onPress={userScanOutPointSummaryfunction}
+          />
+          <Button title="Get Categories list" onPress={get_Categories_List} />
+          <Button
+            title="Get User Base Points list"
+            onPress={get_User_Base_Points}
+          />
+          <Button
+            title="Get User Scan History"
+            onPress={get_User_Scan_History}
+          />
+          <Button
+            title="Capture Customer Details"
+            onPress={capture_Customer_Details}
+          />
+          <Button title="Register warranty" onPress={register_Warranty} />
+          <Button
+            title="get Eligible Products"
+            onPress={get_Eligible_Products}
+          />
 
-        {/* <Button
+          {/* <Button
         title="get Combo slab scheme"
         onPress={get_ComboSlab_Schemes}
       /> */}
@@ -755,6 +775,7 @@ export default function App() {
         />
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 }
 
