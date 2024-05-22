@@ -12,7 +12,8 @@
   "dependencies": {
     "metro-react-native-babel-preset": "^0.77.0",
     "react": "18.2.0",
-    "react-native": "0.73.7"
+    "react-native": "0.73.7",
+    "react-native-image-picker": "^7.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

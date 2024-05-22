@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+
+import { launchImageLibrary } from 'react-native-image-picker';
 import {
   StyleSheet,
   View,
@@ -21,7 +23,7 @@ import {
   registerWarranty,
   getEligibleProducts,
   //getComboSlabSchemes,
-  getSlabView,
+  getSchemeSlabBasedSlab,
   RewardsPoints,
   getSlabBasedSchemes,
   getCrossSchemesDetails,
@@ -29,6 +31,18 @@ import {
   registerCustomer,
   processForPin,
   processCoupon,
+  getProductCrossSellScheme,
+  getProductSlabBasedScheme,
+  bankTransfer,
+  scanIn,
+  getFile,
+  uploadFile,
+  getTdsCertificate,
+  getSchemeFileList,
+  GetPrimarySchemeFileList,
+  getSchemeCrossBasedSlab,
+  getCurrentSlabOnSlabBased,
+  getCurrentSlabOnCrossSell,
 } from 'react-native-vg-retailer-sdk';
 
 export default function App() {
@@ -38,8 +52,8 @@ export default function App() {
   async function bankdetails() {
     try {
       let data = await verifyBankDetails({
-        bankIfsc: 'SBIN0010792',
-        bankAccNo: '31348186046',
+        bankIfsc: 'PUNB0601500',
+        bankAccNo: '6015001500010225',
         bankAccHolderName: '',
         bankAccType: '',
         bankNameAndBranch: '',
@@ -55,14 +69,35 @@ export default function App() {
     }
   }
 
+
+  async function get_Current_Slab_On_Slab_Based() {
+    try {
+      let data = await getCurrentSlabOnSlabBased({ schemeCode: 'VGSCHA3025' });
+      console.log(data, '>>>>>>>>>>>>>>>>');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err);
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_Current_Slab_On_Cross_Sell() {
+    try {
+      let data = await getCurrentSlabOnCrossSell({ schemeCode: 'VGSCH6CD58' });
+      console.log(data, '>>>>>>>>>>>>>>>>');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err);
+      setResult((err as Error).toString());
+    }
+  }
+
   async function userRewardHistory() {
     try {
       let data = await rewardPointsHistory({
-        // "mode" : ["payt", "bank transfer"], //bank transfer or UPI
-        status: ['success'], //success, pending, failed
-        // "fromDate" : "2021-01-02",
-        // "toDate" : "2022-04-12",
-        //"userId":"22390"
+        mode: ['paytm'],
+        status: [],
+        fromDate: '2022-09-01',
+        toDate: '2022-09-30',
       });
       console.log(data, '>>>>>>>>>>>>>>>>');
       setResult(data.toString());
@@ -75,7 +110,7 @@ export default function App() {
   async function ScannedBalancePoint() {
     try {
       let data = await ScannedBalancePoints({
-        categories: [1, 3],
+        categories: [3],
         subCategories: [],
         //userId: '22390',
       });
@@ -89,7 +124,7 @@ export default function App() {
   async function userScanOutPointSummaryfunction() {
     try {
       let data = await userScanOutPointSummary({
-        categories: [1, 3],
+        categories: [3],
         subCategories: [6],
         userId: '22390',
       });
@@ -103,7 +138,7 @@ export default function App() {
   async function get_Categories_List() {
     try {
       let data = await getCategoriesList({
-        categories: [1, 3, 5],
+        categories: [4],
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -115,8 +150,8 @@ export default function App() {
   async function get_User_Base_Points() {
     try {
       let data = await getUserBasePoints({
-        categoryIds: ['1', '3'],
-        subCategoryIds: ['8', '9'],
+        categoryIds: ['1'],
+        subCategoryIds: ['6'],
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -128,10 +163,11 @@ export default function App() {
   async function get_User_Scan_History() {
     try {
       let data = await getUserScanHistory({
-        status: ['success'],
-        scanType: 'Scan-out',
-        fromDate: '2023-12-04',
-        couponCode: '5084089287556709',
+        status: [],
+        scanType: '',
+        fromDate: '2021-10-10',
+        couponCode: '',
+        toDate: '2021-10-11',
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -233,7 +269,7 @@ export default function App() {
   async function get_Eligible_Products() {
     try {
       let data = await getEligibleProducts({
-        //"categoryId":"1",
+        categoryId: '',
         schemeId: 'VGSCH4E8FB',
       });
       console.log(data, '--------------');
@@ -257,6 +293,7 @@ export default function App() {
     try {
       let data = await getCrossSchemesDetails({
         categoryIds: [],
+        subCategoryIds: [8],
         endDate: '',
         fromDate: '',
         status: '',
@@ -272,6 +309,7 @@ export default function App() {
     try {
       let data = await getSlabBasedSchemes({
         categoryIds: [],
+        subCategoryIds: [8],
         endDate: '',
         fromDate: '',
         status: '',
@@ -283,9 +321,19 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
-  async function get_Slab_View() {
+  async function get_Scheme_Slab_Based_Slab() {
     try {
-      let data = await getSlabView({ schemeId: 'VGSCHFC60D' });
+      let data = await getSchemeSlabBasedSlab({ schemeId: 'VGSCH4E8FB' });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_Scheme_Cross_Based_Slab() {
+    try {
+      let data = await getSchemeCrossBasedSlab({ schemeId: 'VGSCHFC60D' });
       console.log(data, '--------------');
       setResult(data.toString());
     } catch (err) {
@@ -449,6 +497,130 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
+  async function get_Product_Slab_Sell_Scheme() {
+    try {
+      let data = await getProductSlabBasedScheme({
+        subCategory: [],
+        category: [],
+        schemeNumber: 'VGSCH6CD58',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_Product_Cross_Sell_Scheme() {
+    try {
+      let data = await getProductCrossSellScheme({
+        subCategory: [],
+        category: [],
+        schemeNumber: 'VGSCH6CD58',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function bank_Transfer() {
+    try {
+      let data = await bankTransfer({
+        amount: '0',
+        bankDetail: {
+          bankAccHolderName: 'ehhegge',
+          bankAccNo: '3461616',
+          bankAccType: '',
+          bankIfsc: 'zvzxbbx266',
+          bankNameAndBranch: 'Andhra bank',
+          checkPhoto: '451ac963-6290-4374-9881-9c54a76fee7b.jpg',
+        },
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+
+  async function scan_In() {
+    try {
+      let data = await scanIn({
+        couponCode: '7654367982156745',
+        pin: '<string>',
+        smsText: '<string>',
+        from: '<string>',
+        userType: '<string>',
+        userId: '<long>',
+        apmID: '<long>',
+        userCode: '<string>',
+        latitude: '<string>',
+        longitude: '<string>',
+        geolocation: '<string>',
+        category: '<string>',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_File() {
+    try {
+      let data = await getFile({
+        uuid: 'bbcc2b15-047c-409a-8786-4ea50e8ac2c9.jpg',
+        imageRelated: 'BILL',
+        userRole: '2',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_Tds_Certicate_Files() {
+    try {
+      let data = await getTdsCertificate({
+        fileId: '1',
+        fiscalStartYear: '',
+        fiscalEndYear: '',
+        quater: '',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+  async function get_Scheme_File_List() {
+    try {
+      let data = await getSchemeFileList({
+        schemeId: 'VGSCHFC60D',
+      });
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
+
+  async function Get_Primary_Scheme_File_List() {
+    try {
+      let data = await GetPrimarySchemeFileList();
+      console.log(data, '--------------');
+      setResult(data.toString());
+    } catch (err) {
+      console.log(err, '');
+      setResult((err as Error).toString());
+    }
+  }
   // const volleyu = async () => {
   //   let data = await postData();
   //   console.log(data);
@@ -460,7 +632,7 @@ export default function App() {
         accesstoken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTYyOTI2MjYsImV4cCI6MTcxODg4NDYyNn0.0nVrd09e5lo9ZC7E_ewn6nOQVMP6n_0HWCvF6wpokrk',
         refreshtoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1MTU2NzMyLCJleHAiOjE3MTc3NDg3MzJ9.Y95UlruM5Gn3jI0VvTnCYbry4p8HyDCwh1M_r3v_YsU',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NjY5NTI2LCJleHAiOjE3MTgyNjE1MjZ9.H5NDmlhRgyGfbHYUYcr346m6UMIFqccudLc2jQsMvAE',
       });
       console.log(data);
       setResult(data.toString());
@@ -469,6 +641,39 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
+  const handleCameraUpload = () => {
+    launchImageLibrary({
+      mediaType: 'photo',
+      includeBase64: false,
+    })
+      .then((response: any) => {
+        console.log(response);
+        uploadFile({
+          imageRelated: 'BILL',
+          userRole: '2',
+          file: {
+            fileType: response.assets[0].type,
+            fileUri: response.assets[0].uri,
+            fileName: response.assets[0].fileName,
+          },
+        })
+          .then((data: any) => {
+            console.log(data);
+            setResult(data.toString());
+          })
+          .catch((er) => {
+            setResult((er as Error).toString());
+          });
+        //setResult(data.toString());
+      })
+      .catch((er) => {
+        console.log(er);
+        setResult((er as Error).toString());
+      });
+
+    console.log('adfsdvjksdvjkdjkvda');
+  };
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -509,28 +714,67 @@ export default function App() {
         title="get Combo slab scheme"
         onPress={get_ComboSlab_Schemes}
       /> */}
-          <Button title="Get Slab View" onPress={get_Slab_View} />
-          <Button title="Get Reward Points" onPress={reward_points} />
-          <Button
-            title="Get Combo based schemes "
-            onPress={get_Combo_Based_Schemes}
-          />
-          <Button
-            title="Get slab based schemes "
-            onPress={get_Slab_Based_Schemes}
-          />
-          <Button title="Get Reward Points" onPress={reward_points} />
-          <Button
-            title="validate retailer coupon"
-            onPress={validate_Retailer_Coupon}
-          />
-          <Button title="register customer" onPress={register_Customer} />
-          <Button title="Process for pin" onPress={process_For_Pin} />
-          <Button title="Process Coupon" onPress={process_Coupon} />
-          <Button title="Initialize SDK" onPress={intializesdk} />
-          <Button title="Clear" onPress={() => setResult('')} />
-        </View>
-      </ScrollView>
+        <Button
+          title="get_Scheme_Slab_Based_Slab"
+          onPress={get_Scheme_Slab_Based_Slab}
+        />
+        <Button
+          title="get_Scheme_Cross_Based_Slab"
+          onPress={get_Scheme_Cross_Based_Slab}
+        />
+        <Button title="Get Reward Points" onPress={reward_points} />
+        <Button
+          title="Get Combo based schemes "
+          onPress={get_Combo_Based_Schemes}
+        />
+        <Button
+          title="Get slab based schemes "
+          onPress={get_Slab_Based_Schemes}
+        />
+        <Button title="Get Reward Points" onPress={reward_points} />
+        <Button
+          title="validate retailer coupon"
+          onPress={validate_Retailer_Coupon}
+        />
+        <Button title="register customer" onPress={register_Customer} />
+        <Button title="Process for pin" onPress={process_For_Pin} />
+        <Button title="Process Coupon" onPress={process_Coupon} />
+        <Button
+          title="get_Product_Cross_Sell_Scheme"
+          onPress={get_Product_Cross_Sell_Scheme}
+        />
+        <Button
+          title="get_Product_Slab_Sell_Scheme"
+          onPress={get_Product_Slab_Sell_Scheme}
+        />
+        <Button title="Bank Transfer" onPress={bank_Transfer} />
+        <Button title="Scan In" onPress={scan_In} />
+        <Button title="Get File" onPress={get_File} />
+        <Button title="Initialize SDK" onPress={intializesdk} />
+        <Button title="Clear" onPress={() => setResult('')} />
+        <Button title="Test" onPress={handleCameraUpload} />
+        <Button
+          title="Get Tds Certificate Files"
+          onPress={get_Tds_Certicate_Files}
+        />
+        <Button
+          title="Get get_Scheme_File_List"
+          onPress={get_Scheme_File_List}
+        />
+        <Button
+          title="Get_Primary_Scheme_File_List "
+          onPress={Get_Primary_Scheme_File_List}
+        />
+        <Button
+          title="get_Current_Slab_On_Cross_Sell "
+          onPress={get_Current_Slab_On_Cross_Sell}
+        />
+        <Button
+          title="get_Current_Slab_On_Slab_Based "
+          onPress={get_Current_Slab_On_Slab_Based}
+        />
+      </View>
+    </ScrollView>
     </SafeAreaView>
   );
 }

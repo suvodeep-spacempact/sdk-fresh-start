@@ -5,13 +5,14 @@ class GetUserScanHistoryRequest{
     var scanType: String = ""
     var fromDate: String = ""
     var couponCode: String = ""
+    var toDate: String = ""
 
-
-    constructor(status: Array<String>,scanType: String,fromDate: String,couponCode: String ) {
+    constructor(status: Array<String>,scanType: String,fromDate: String,couponCode: String,toDate: String ) {
         this.status = status
         this.scanType = scanType
         this.fromDate = fromDate
         this.couponCode = couponCode
+        this.toDate = toDate
     }
 
 }
