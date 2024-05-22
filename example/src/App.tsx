@@ -1,8 +1,14 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, Button, ScrollView } from 'react-native';
 import {
-  multiply,
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
+import {
   verifyBankDetails,
   rewardPointsHistory,
   ScannedBalancePoints,
@@ -27,9 +33,7 @@ import {
 
 export default function App() {
   const [result, setResult] = React.useState<string | number | undefined>();
-  React.useEffect(() => {
-
-  }, []);
+  React.useEffect(() => {}, []);
 
   async function bankdetails() {
     try {
@@ -50,8 +54,6 @@ export default function App() {
       setResult((err as Error).toString());
     }
   }
-
-
 
   async function userRewardHistory() {
     try {
@@ -454,9 +456,9 @@ export default function App() {
   async function intializesdk() {
     try {
       let data = await InitializeSDK({
-        baseurl: 'http://34.93.239.251:5000/vguard/api',
+        baseurl: 'https://retsdk.4test.infos/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1MTU2NzMyLCJleHAiOjE3MTc3NDg3MzJ9.mn9Xkdl0soVf19vlcXS4eVkArcfkB3mdBpXYVogppp4',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTYyOTI2MjYsImV4cCI6MTcxODg4NDYyNn0.0nVrd09e5lo9ZC7E_ewn6nOQVMP6n_0HWCvF6wpokrk',
         refreshtoken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1MTU2NzMyLCJleHAiOjE3MTc3NDg3MzJ9.Y95UlruM5Gn3jI0VvTnCYbry4p8HyDCwh1M_r3v_YsU',
       });
@@ -468,57 +470,68 @@ export default function App() {
     }
   }
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Button title="Bank details" onPress={bankdetails} />
+    <SafeAreaView>
+      <ScrollView>
+        <View style={styles.container}>
+          <Button title="Bank details" onPress={bankdetails} />
 
-        <Text>Result: {result}</Text>
-        {/* <Button title="Check if user Exists" onPress={userExists} /> */}
-        <Button title="User Reward Historys" onPress={userRewardHistory} />
-        <Button title="Scanned Balance Points" onPress={ScannedBalancePoint} />
-        <Button
-          title="user Scan Out Point Summary"
-          onPress={userScanOutPointSummaryfunction}
-        />
-        <Button title="Get Categories list" onPress={get_Categories_List} />
-        <Button
-          title="Get User Base Points list"
-          onPress={get_User_Base_Points}
-        />
-        <Button title="Get User Scan History" onPress={get_User_Scan_History} />
-        <Button
-          title="Capture Customer Details"
-          onPress={capture_Customer_Details}
-        />
-        <Button title="Register warranty" onPress={register_Warranty} />
-        <Button title="get Eligible Products" onPress={get_Eligible_Products} />
+          <Text>Result: {result}</Text>
+          {/* <Button title="Check if user Exists" onPress={userExists} /> */}
+          <Button title="User Reward Historys" onPress={userRewardHistory} />
+          <Button
+            title="Scanned Balance Points"
+            onPress={ScannedBalancePoint}
+          />
+          <Button
+            title="user Scan Out Point Summary"
+            onPress={userScanOutPointSummaryfunction}
+          />
+          <Button title="Get Categories list" onPress={get_Categories_List} />
+          <Button
+            title="Get User Base Points list"
+            onPress={get_User_Base_Points}
+          />
+          <Button
+            title="Get User Scan History"
+            onPress={get_User_Scan_History}
+          />
+          <Button
+            title="Capture Customer Details"
+            onPress={capture_Customer_Details}
+          />
+          <Button title="Register warranty" onPress={register_Warranty} />
+          <Button
+            title="get Eligible Products"
+            onPress={get_Eligible_Products}
+          />
 
-        {/* <Button
+          {/* <Button
         title="get Combo slab scheme"
         onPress={get_ComboSlab_Schemes}
       /> */}
-        <Button title="Get Slab View" onPress={get_Slab_View} />
-        <Button title="Get Reward Points" onPress={reward_points} />
-        <Button
-          title="Get Combo based schemes "
-          onPress={get_Combo_Based_Schemes}
-        />
-        <Button
-          title="Get slab based schemes "
-          onPress={get_Slab_Based_Schemes}
-        />
-        <Button title="Get Reward Points" onPress={reward_points} />
-        <Button
-          title="validate retailer coupon"
-          onPress={validate_Retailer_Coupon}
-        />
-        <Button title="register customer" onPress={register_Customer} />
-        <Button title="Process for pin" onPress={process_For_Pin} />
-        <Button title="Process Coupon" onPress={process_Coupon} />
-        <Button title="Initialize SDK" onPress={intializesdk} />
-        <Button title="Clear" onPress={() => setResult('')} />
-      </View>
-    </ScrollView>
+          <Button title="Get Slab View" onPress={get_Slab_View} />
+          <Button title="Get Reward Points" onPress={reward_points} />
+          <Button
+            title="Get Combo based schemes "
+            onPress={get_Combo_Based_Schemes}
+          />
+          <Button
+            title="Get slab based schemes "
+            onPress={get_Slab_Based_Schemes}
+          />
+          <Button title="Get Reward Points" onPress={reward_points} />
+          <Button
+            title="validate retailer coupon"
+            onPress={validate_Retailer_Coupon}
+          />
+          <Button title="register customer" onPress={register_Customer} />
+          <Button title="Process for pin" onPress={process_For_Pin} />
+          <Button title="Process Coupon" onPress={process_Coupon} />
+          <Button title="Initialize SDK" onPress={intializesdk} />
+          <Button title="Clear" onPress={() => setResult('')} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
