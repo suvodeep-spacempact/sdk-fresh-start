@@ -33,11 +33,5 @@
 	<array/>
 	<key>NSPrivacyTracking</key>
 	<false/>
-	<key>NSAppTransportSecurity</key>
-<dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
-</dict>
-
 </dict>
 </plist>

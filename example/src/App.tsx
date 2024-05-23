@@ -46,7 +46,9 @@ import {
 
 export default function App() {
   const [result, setResult] = React.useState<string | number | undefined>();
-  React.useEffect(() => {}, []);
+  React.useEffect( () => {
+    Promise.resolve(intializesdk())
+  }, []);
 
   async function bankdetails() {
     try {
@@ -626,9 +628,9 @@ export default function App() {
       let data = await InitializeSDK({
         baseurl: 'http://35.207.195.181:5000/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTYzNzE5ODQsImV4cCI6MTcxODk2Mzk4NH0.s1F5-z5kDjekOEvtG8bjeP9RTx28gn-Bu71xD_sr1BE',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTY0NjAxOTQsImV4cCI6MTcxOTA1MjE5NH0.b0iu-p4puV3E8PblHwwkKOl8DfU1AqiCHezf7HKNHf8',
         refreshtoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlJldGFpbGVyIFRlc3Q0IiwiaWF0IjoxNzE1NjY5NTI2LCJleHAiOjE3MTgyNjE1MjZ9.H5NDmlhRgyGfbHYUYcr346m6UMIFqccudLc2jQsMvAE',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTY0NjAxOTQsImV4cCI6MTcxOTA1MjE5NH0.erJFQoHU_ePYbeOo5lzU1bfFiXsZ8vvWcZvIU_d8MSc',
       });
       console.log(data);
       setResult(data.toString());
