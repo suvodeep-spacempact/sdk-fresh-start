@@ -46,8 +46,8 @@ import {
 
 export default function App() {
   const [result, setResult] = React.useState<string | number | undefined>();
-  React.useEffect( () => {
-    Promise.resolve(intializesdk())
+  React.useEffect(() => {
+    Promise.resolve(intializesdk());
   }, []);
 
   async function bankdetails() {
