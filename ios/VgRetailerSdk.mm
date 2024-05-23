@@ -89,7 +89,7 @@ RCT_EXTERN_METHOD(getCurrentSlabOnCrossSell:(NSDictionary *)details
 RCT_EXTERN_METHOD(getCurrentSlabOnSlabBased:(NSDictionary *)details
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
-RCT_EXTERN_METHOD(GetPrimarySchemeFileList:withResolver:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(GetPrimarySchemeFileList: (RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(getCurrentSlabOnSlabBased:(NSDictionary *)details
                   withResolver:(RCTPromiseResolveBlock)resolve

@@ -169,10 +169,6 @@ class VgRetailerSdk: NSObject {
         }
         let getCategoriesListRequest = GetCategoriesListRequest(details: details)
 
-                // Here you can use getCategoriesListRequest object for further processing
-        
-
-                // For example purposes, resolve with the categories array
         guard let jsonData = try? JSONEncoder().encode(getCategoriesListRequest) else {
                 reject("CONVERSION_FAILED", "Failed to convert getCategoriesListRequest to JSON", nil)
                 return
@@ -199,6 +195,7 @@ class VgRetailerSdk: NSObject {
                 }
             }
     }
+    
     @objc(getUserBasePoints:withResolver:withRejecter:)
     func getUserBasePoints(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
         guard var config = config else {
@@ -239,6 +236,7 @@ class VgRetailerSdk: NSObject {
                 }
             }
     }
+    
     @objc(getUserScanHistory:withResolver:withRejecter:)
     func getUserScanHistory(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
         guard var config = config else {
@@ -279,6 +277,7 @@ class VgRetailerSdk: NSObject {
                 }
             }
     }
+    
     @objc(rewardPointsHistory:withResolver:withRejecter:)
     func rewardPointsHistory (details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
         guard var config = config else {
@@ -1136,8 +1135,8 @@ class VgRetailerSdk: NSObject {
             }
     }
     
-    @objc
-    func GetPrimarySchemeFileList(_ resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+    @objc(GetPrimarySchemeFileList:withRejecter:)
+    func GetPrimarySchemeFileList(_ resolve: @escaping (Any?) -> Void, withRejecter reject: @escaping (String, String, Error?) -> Void) {
         guard var config = config else {
                 reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
                 return
@@ -1166,6 +1165,7 @@ class VgRetailerSdk: NSObject {
                     }
                 }
     }
+   
     @objc(getCurrentSlabOnCrossSell:withResolver:withRejecter:)
     func getCurrentSlabOnCrossSell(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
         guard var config = config else {
