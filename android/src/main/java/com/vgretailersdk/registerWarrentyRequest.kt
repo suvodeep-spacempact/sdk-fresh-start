@@ -50,7 +50,7 @@ data class Cresp(
     val scanStatus: String,
     val copuonCode: String,
     val bitEligibleScratchCard: Boolean,
-    val pardId: Int,
+    val partId: Int,
     val partNumber: String,
     val partName: String,
     val couponCode: String,
