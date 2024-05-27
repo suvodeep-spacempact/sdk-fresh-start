@@ -1409,7 +1409,7 @@ class VgRetailerSdk: NSObject {
                 print("Initialized SDK with Refresh Token: \(config.refreshtoken)")
             }
 
-            resolve("SDK Initialized successfully")
+            resolve("SDK was initialized successfully.")
         }
     
 
