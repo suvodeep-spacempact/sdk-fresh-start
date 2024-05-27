@@ -2998,7 +2998,11 @@ fun GetPrimarySchemeFileList(promise: Promise){
         requestData.getString("accesstoken") ?: "",
         requestData.getString("refreshtoken") ?: "",
     )
-    promise.resolve("SDK was initialized successfully.")
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK was initialized successfully.")
+    jsonObject.put("status", 200)
+    val jsonString = jsonObject.toString()
+    promise.reject(jsonString)
   }
 
   companion object {

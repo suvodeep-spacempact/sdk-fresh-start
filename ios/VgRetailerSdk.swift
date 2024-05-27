@@ -1408,8 +1408,8 @@ class VgRetailerSdk: NSObject {
                 print("Initialized SDK with Access Token: \(config.accesstoken)")
                 print("Initialized SDK with Refresh Token: \(config.refreshtoken)")
             }
-
-            resolve("SDK was initialized successfully.")
+            let response = ["message": "SDK was initialized successfully.", "status": 200]
+            resolve(response)
         }
     
 
