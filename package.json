@@ -1,6 +1,6 @@
 {
   "name": "react-native-vg-retailer-sdk",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "VGUARD SDK Retailer Program",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
