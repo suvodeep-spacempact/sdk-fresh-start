@@ -3000,9 +3000,9 @@ fun GetPrimarySchemeFileList(promise: Promise){
     )
     val jsonObject = JSONObject()
     jsonObject.put("message", "SDK was initialized successfully.")
-    jsonObject.put("status", 200)
+    jsonObject.put("status", "200")
     val jsonString = jsonObject.toString()
-    promise.reject(jsonString)
+    promise.resolve(jsonString)
   }
 
   companion object {

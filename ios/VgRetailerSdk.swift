@@ -1408,8 +1408,13 @@ class VgRetailerSdk: NSObject {
                 print("Initialized SDK with Access Token: \(config.accesstoken)")
                 print("Initialized SDK with Refresh Token: \(config.refreshtoken)")
             }
-            let response = ["message": "SDK was initialized successfully.", "status": 200]
-            resolve(response)
+        let response = ["message": "SDK was initialized successfully.", "status": "200"]
+        if let jsonData = try? JSONSerialization.data(withJSONObject: response, options: []),
+               let jsonString = String(data: jsonData, encoding: .utf8) {
+                resolve(jsonString)
+            } else {
+                reject("JSON_ENCODING_ERROR", "Failed to encode response as JSON string", nil)
+            }
         }
     
 
