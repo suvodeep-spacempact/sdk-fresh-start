@@ -1191,7 +1191,7 @@ class VgRetailerSdk: NSObject {
                 return
             }
 
-            AF.request(config.baseurl + "/schemes/getSlabView/slabDetails",
+            AF.request(config.baseurl + "/schemes/getUserCurrentSlab/comboBased",
                        method: .post,
                        parameters: jsonDetails,
                        encoding: JSONEncoding.default,

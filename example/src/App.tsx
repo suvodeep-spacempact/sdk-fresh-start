@@ -82,7 +82,7 @@ export default function App() {
   }
   async function get_Current_Slab_On_Cross_Sell() {
     try {
-      let data = await getCurrentSlabOnCrossSell({ schemeCode: 'VGSCH6CD58' });
+      let data = await getCurrentSlabOnCrossSell({ schemeCode: 'VGSCHFC60D' });
       console.log(data, '>>>>>>>>>>>>>>>>');
       setResult(data.toString());
     } catch (err) {
