@@ -82,7 +82,7 @@ class Cresp: Codable {
     var scanStatus: String
     var copuonCode: String
     var bitEligibleScratchCard: Bool
-    var pardId: Int
+    var partId: Int
     var partNumber: String
     var partName: String
     var couponCode: String
@@ -111,7 +111,7 @@ class Cresp: Codable {
         scanStatus = details["scanStatus"] as? String ?? ""
         copuonCode = details["copuonCode"] as? String ?? ""
         bitEligibleScratchCard = details["bitEligibleScratchCard"] as? Bool ?? false
-        pardId = details["pardId"] as? Int ?? 0
+        partId = details["partId"] as? Int ?? 0
         partNumber = details["partNumber"] as? String ?? ""
         partName = details["partName"] as? String ?? ""
         couponCode = details["couponCode"] as? String ?? ""
