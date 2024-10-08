@@ -7,9 +7,11 @@ class ValidateRetailerCouponRequest{
     var geolocation : String = ""
     var latitude : String = ""
     var longitude : String = ""
+    var pin : String = ""
     var retailerCoupon : Boolean
+    
 
-    constructor(category: String,couponCode: String,from: String,geolocation: String,latitude: String,longitude: String,retailerCoupon: Boolean,) {
+    constructor(category: String,couponCode: String,from: String,geolocation: String,latitude: String,longitude: String,retailerCoupon: Boolean,pin: String) {
         this.category = category
         this.couponCode = couponCode
         this.from = from
@@ -17,6 +19,7 @@ class ValidateRetailerCouponRequest{
         this.latitude = latitude
         this.longitude = longitude
         this.retailerCoupon = retailerCoupon
+        this.pin = pin
     }
 
 }

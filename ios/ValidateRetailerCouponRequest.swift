@@ -8,6 +8,7 @@ class ValidateRetailerCouponRequest: Codable {
     var latitude: String
     var longitude: String
     var retailerCoupon: Bool
+    var pin: String
 
     // Custom initializer to initialize the object with values from the NSDictionary
     init(details: NSDictionary) {
@@ -18,5 +19,6 @@ class ValidateRetailerCouponRequest: Codable {
         latitude = details["latitude"] as? String ?? ""
         longitude = details["longitude"] as? String ?? ""
         retailerCoupon = details["retailerCoupon"] as? Bool ?? false
+        pin = details["pin"] as? String ?? ""
     }
 }

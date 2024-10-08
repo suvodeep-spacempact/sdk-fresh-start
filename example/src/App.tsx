@@ -355,12 +355,13 @@ export default function App() {
     try {
       let data = await validateRetailerCoupon({
         category: 'Customer',
-        couponCode: '5362224187701942',
+        couponCode: '1769468467682601',
         from: 'APP',
         geolocation: '',
         latitude: '12.892242',
         longitude: '77.5976361',
         retailerCoupon: 'true',
+        pin: '',
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -549,18 +550,12 @@ export default function App() {
   async function scan_In() {
     try {
       let data = await scanIn({
-        couponCode: '7654367982156745',
-        pin: '<string>',
-        smsText: '<string>',
-        from: '<string>',
-        userType: '<string>',
-        userId: '<long>',
-        apmID: '<long>',
-        userCode: '<string>',
-        latitude: '<string>',
-        longitude: '<string>',
-        geolocation: '<string>',
-        category: '<string>',
+        couponCode: '9839689332623590',
+        pin: '567',
+        from: 'APP',
+        latitude: 'cacda',
+        longitude: 'dcsdcsd',
+        geolocation: 'sddcsdc',
       });
       console.log(data, '--------------');
       setResult(data.toString());
@@ -626,11 +621,11 @@ export default function App() {
   async function intializesdk() {
     try {
       let data = await InitializeSDK({
-        baseurl: 'http://35.207.195.181:5000/vguard/api',
+        baseurl: 'https://stg-retailer.vguardrishta.com/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTY0NjAxOTQsImV4cCI6MTcxOTA1MjE5NH0.b0iu-p4puV3E8PblHwwkKOl8DfU1AqiCHezf7HKNHf8',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MjgzNzc4NjMsImV4cCI6MTczMDk2OTg2M30.UtdRmKnLYYJWqQTwaat0l0VwZ0cnOY83Fmh-n-TwXPs',
         refreshtoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MTY0NjAxOTQsImV4cCI6MTcxOTA1MjE5NH0.erJFQoHU_ePYbeOo5lzU1bfFiXsZ8vvWcZvIU_d8MSc',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MjgzNzc4NjMsImV4cCI6MTczMDk2OTg2M30.A2LHZUzt3nRTdPbOplsTXgKJy0PsFxizscKKnQPOnjk',
       });
       console.log(data);
       setResult(data.toString());

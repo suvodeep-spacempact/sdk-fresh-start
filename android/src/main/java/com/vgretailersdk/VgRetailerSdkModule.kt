@@ -1770,6 +1770,7 @@ fun validateRetailerCoupon(requestData: ReadableMap,promise: Promise){
         requestData.getString("latitude") ?: "",
         requestData.getString("longitude") ?: "",
         requestData.getString("retailerCoupon") ?.toBoolean() ?: false,
+        requestData.getString("pin") ?: ""
     )
     val stringRequest = object : StringRequest(
         Method.POST, baseurl+"/coupon/validateRetailerCoupon",
