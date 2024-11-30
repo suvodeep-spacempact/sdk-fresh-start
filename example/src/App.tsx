@@ -355,7 +355,7 @@ export default function App() {
     try {
       let data = await validateRetailerCoupon({
         category: 'Customer',
-        couponCode: '1769468467682601',
+        couponCode: '9516304880380631',
         from: 'APP',
         geolocation: '',
         latitude: '12.892242',
@@ -477,9 +477,9 @@ export default function App() {
   async function process_Coupon() {
     try {
       let data = await processCoupon({
-        userMobileNumber: '9811555789',
-        couponCode: '9802522723211275',
-        pin: '1234',
+        userMobileNumber: '',
+        couponCode: '9516304880380631',
+        pin: '',
         smsText: '',
         from: '',
         userType: '',
@@ -621,11 +621,11 @@ export default function App() {
   async function intializesdk() {
     try {
       let data = await InitializeSDK({
-        baseurl: 'https://stg-retailer.vguardrishta.com/vguard/api',
+        baseurl: 'https://retailer.vguardrishta.com/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MjgzNzc4NjMsImV4cCI6MTczMDk2OTg2M30.UtdRmKnLYYJWqQTwaat0l0VwZ0cnOY83Fmh-n-TwXPs',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI1NDk3NSwicm9sZUlkIjoiMiIsInVzZXJDb2RlIjoiVkdJTDAyMTg1MTMiLCJpc0FjdGl2ZSI6IjEiLCJtb2JpbGUiOiI4MDU2MzMwNTIzIiwiZGlzcGxheU5hbWUiOiJSQUpBTEFLU0hNSSIsImlhdCI6MTczMjcwNDIxNCwiZXhwIjoxNzM1Mjk2MjE0fQ.9sXmqPb-G84BpGgtuF0pZur7ASs1fVlc1YBKRfc_1J4',
         refreshtoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIyMzkwLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDEyMTg5OCIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6Ijk4MTE1NTU3ODkiLCJkaXNwbGF5TmFtZSI6IlN1bWl0IFRlc3QiLCJpYXQiOjE3MjgzNzc4NjMsImV4cCI6MTczMDk2OTg2M30.A2LHZUzt3nRTdPbOplsTXgKJy0PsFxizscKKnQPOnjk',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI1NDk3NSwicm9sZUlkIjoiMiIsInVzZXJDb2RlIjoiVkdJTDAyMTg1MTMiLCJpc0FjdGl2ZSI6IjEiLCJtb2JpbGUiOiI4MDU2MzMwNTIzIiwiZGlzcGxheU5hbWUiOiJSQUpBTEFLU0hNSSIsImlhdCI6MTczMjcwNDIxNCwiZXhwIjoxNzM1Mjk2MjE0fQ.mHspKG1dpHPXKjw99jHxXSyJXl1sSNvzlVXitF3foyI',
       });
       console.log(data);
       setResult(data.toString());
