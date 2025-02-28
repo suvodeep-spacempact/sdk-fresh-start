@@ -9,10 +9,13 @@ class ScannedBalancePointsRequest{
     var subCategories: Array<Int> = emptyArray()
     @SerializedName("userId")
     var userId : String = ""
-    constructor(categories: Array<Int>,subCategories: Array<Int>,userId: String) {
+    @SerializedName("scheme")
+    var scheme: Array<String> = emptyArray()
+    constructor(categories: Array<Int>,subCategories: Array<Int>,userId: String, scheme: Array<String>) {
         this.userId = userId
         this.categories = categories
         this.subCategories = subCategories
+        this.scheme = scheme
     }
 
 }
