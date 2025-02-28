@@ -20,6 +20,8 @@ class ValidateRetailerCouponRequest{
     var pin : String = ""
     @SerializedName("retailerCoupon")
     var retailerCoupon : Boolean
+    @SerializedName("source")
+    var source : String = "SDK"
     
 
     constructor(category: String,couponCode: String,from: String,geolocation: String,latitude: String,longitude: String,retailerCoupon: Boolean,pin: String) {
@@ -31,6 +33,7 @@ class ValidateRetailerCouponRequest{
         this.longitude = longitude
         this.retailerCoupon = retailerCoupon
         this.pin = pin
+        this.source = "SDK"
     }
 
 }

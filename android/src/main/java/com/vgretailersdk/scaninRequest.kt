@@ -26,5 +26,7 @@ data class  ScanInRequest(
     @SerializedName("geolocation")
     val geolocation: String,
     @SerializedName("category")
-    val category: String
+    val category: String,
+    @SerializedName("source")
+    val source: String
 )

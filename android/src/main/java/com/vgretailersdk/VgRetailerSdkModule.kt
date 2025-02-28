@@ -621,10 +621,22 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
     } else {
         emptyArray()
     }
+
+    val schemeArray: Array<String> = if (requestData.hasKey("scheme")) {
+      val schemeReadableArray = requestData.getArray("scheme")
+      val schemeList = mutableListOf<String>()
+      for (i in 0 until (schemeReadableArray?.size() ?: 0)) {
+        schemeList.add(schemeReadableArray?.getString(i) ?: "")
+      }
+        schemeList.toTypedArray()
+    } else {
+        emptyArray()
+    }
     val requestBody = ScannedBalancePointsRequest(
         categoriesArray,
         subCategoriesArray,
         requestData.getString("userId") ?: "",
+        schemeArray
     )
     val stringRequest = object : StringRequest(
         Method.POST, baseurl+"/product/userScannedBalancePoints",
@@ -725,10 +737,23 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
     } else {
         emptyArray()
     }
+
+    val schemeArray: Array<String> = if (requestData.hasKey("scheme")) {
+      val schemeReadableArray = requestData.getArray("scheme")
+      val schemeList = mutableListOf<String>()
+      for (i in 0 until (schemeReadableArray?.size() ?: 0)) {
+        schemeList.add(schemeReadableArray?.getString(i) ?: "")
+      }
+        schemeList.toTypedArray()
+    } else {
+        emptyArray()
+    }
+
     val requestBody = ScannedBalancePointsRequest(
         categoriesArray,
         subCategoriesArray,
         requestData.getString("userId") ?: "",
+        schemeArray
     )
     val stringRequest = object : StringRequest(
         Method.POST, baseurl+"/product/userScanOutPointSummary",
@@ -2523,6 +2548,7 @@ fun scanIn(requestData: ReadableMap,promise: Promise){
         requestData.getString("longitude") ?: "",
         requestData.getString("geolocation") ?: "",
         requestData.getString("category") ?: "",
+        "SDK"
     )
     val stringRequest = object : StringRequest(
         Method.POST, baseurl+"/coupon/scanIn",
