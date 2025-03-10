@@ -13,7 +13,7 @@ class ScanInRequest: Codable {
     var longitude: String
     var geolocation: String
     var category: String
-
+    var source: String
     // Custom initializer to initialize the object with values from the NSDictionary
     init(details: NSDictionary) {
         couponCode = details["couponCode"] as? String ?? ""
@@ -28,6 +28,7 @@ class ScanInRequest: Codable {
         longitude = details["longitude"] as? String ?? ""
         geolocation = details["geolocation"] as? String ?? ""
         category = details["category"] as? String ?? ""
+        source = "SDK"
     }
 }
 

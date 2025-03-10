@@ -3,6 +3,8 @@ package com.vgretailersdk
 import com.google.gson.annotations.SerializedName
 
 data class RegisterWarrantyRequest(
+    @SerializedName("source")
+    val source:String,
     @SerializedName("nameTitle")
     val nameTitle: String,
     @SerializedName("contactNo")

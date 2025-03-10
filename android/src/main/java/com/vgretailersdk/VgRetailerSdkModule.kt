@@ -81,21 +81,21 @@ class VgRetailerSdkModule(reactContext: ReactApplicationContext) :
   override fun getName(): String {
     return NAME
   }
-  
+
   // Example method
   // See https://reactnative.dev/docs/native-modules-android
   @ReactMethod
   fun multiply(a: Double, b: Double, promise: Promise) {
     promise.resolve(a * b)
   }
-  
+
 
 
 fun isTokenExpired(token: String): Boolean {
   val parts = token.split("\\.".toRegex()).toTypedArray()
   val decodedPayload = String(Base64.getDecoder().decode(parts[1]), StandardCharsets.UTF_8)
   val payloadJson = JSONObject(decodedPayload)
-  
+
   val expirationTime = payloadJson.optLong("exp", 0)
   val currentTime = System.currentTimeMillis() / 1000
 
@@ -477,7 +477,7 @@ fun getUserScanHistory(requestData: ReadableMap,promise: Promise){
     promise.reject(jsonString)
   }
 }
-  
+
 @ReactMethod
 fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
   try{
@@ -513,13 +513,13 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
     } else {
       emptyArray()
     }
-    
+
     val requestBody = RewardHistoryRequest(
         modeArray,
         statusArray,
         requestData.getString("fromDate") ?: "",
         requestData.getString("toDate") ?: "",
-        requestData.getString("userId") ?: "",   
+        requestData.getString("userId") ?: "",
     )
     val stringRequest = object : StringRequest(
         Method.POST, baseurl+"/product/userRewardHistory",
@@ -548,7 +548,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
           val jsonString = jsonObject.toString()
           promise.reject(jsonString)
         }) {
-        
+
         override fun getBody(): ByteArray {
             val gson = Gson()
             val jsonBody = gson.toJson(requestBody)
@@ -621,10 +621,22 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
     } else {
         emptyArray()
     }
+
+    val schemeArray: Array<String> = if (requestData.hasKey("scheme")) {
+      val schemeReadableArray = requestData.getArray("scheme")
+      val schemeList = mutableListOf<String>()
+      for (i in 0 until (schemeReadableArray?.size() ?: 0)) {
+        schemeList.add(schemeReadableArray?.getString(i) ?: "")
+      }
+        schemeList.toTypedArray()
+    } else {
+        emptyArray()
+    }
     val requestBody = ScannedBalancePointsRequest(
         categoriesArray,
         subCategoriesArray,
         requestData.getString("userId") ?: "",
+        schemeArray
     )
     val stringRequest = object : StringRequest(
         Method.POST, baseurl+"/product/userScannedBalancePoints",
@@ -725,10 +737,23 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
     } else {
         emptyArray()
     }
+
+    val schemeArray: Array<String> = if (requestData.hasKey("scheme")) {
+      val schemeReadableArray = requestData.getArray("scheme")
+      val schemeList = mutableListOf<String>()
+      for (i in 0 until (schemeReadableArray?.size() ?: 0)) {
+        schemeList.add(schemeReadableArray?.getString(i) ?: "")
+      }
+        schemeList.toTypedArray()
+    } else {
+        emptyArray()
+    }
+
     val requestBody = ScannedBalancePointsRequest(
         categoriesArray,
         subCategoriesArray,
         requestData.getString("userId") ?: "",
+        schemeArray
     )
     val stringRequest = object : StringRequest(
         Method.POST, baseurl+"/product/userScanOutPointSummary",
@@ -813,7 +838,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       val fullUrl = "$url/$mobileNo"
       Log.d("cat",fullUrl)
       val stringRequest = object : StringRequest(
-        Method.GET, 
+        Method.GET,
         fullUrl, // Modified URL with query parameters
         Response.Listener { response ->
           promise.resolve(response)
@@ -865,7 +890,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       jsonObject.put("message", "Internal Server Error.")
       jsonObject.put("code", 500)
       val jsonString = jsonObject.toString()
-      promise.reject(jsonString)      
+      promise.reject(jsonString)
     }
   }
 
@@ -886,6 +911,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       val cresp = requestData.getMap("cresp")
       val selectedProd = requestData.getMap("selectedProd")
       val requestBody = RegisterWarrantyRequest(
+      "SDK",
       requestData.getString("nameTitle") ?: "",
       requestData.getString("contactNo") ?: "",
       requestData.getString("name") ?: "",
@@ -911,7 +937,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       requestData.getString("emptStr") ?: "",
       Cresp(
         cresp?.getString("custIdForProdInstall") ?: "",
-        cresp?.getString("modelForProdInstall") ?: "", 
+        cresp?.getString("modelForProdInstall") ?: "",
         cresp?.getInt("errorCode") ?: 0,
         cresp?.getString("errorMsg") ?: "",
         cresp?.getInt("statusType") ?: 0,
@@ -952,7 +978,7 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
         selectedProd?.getString("paytmMobileNo") ?: "",
       ),
       requestData.getString("latitude") ?: "",
-      requestData.getString("longitude") ?: "",   
+      requestData.getString("longitude") ?: "",
       requestData.getString("geolocation") ?: "",
       requestData.getString("dealerCategory") ?: "",
     )
@@ -1016,11 +1042,11 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       jsonObject.put("message", "Internal Server Error.")
       jsonObject.put("code", 500)
       val jsonString = jsonObject.toString()
-      promise.reject(jsonString)      
+      promise.reject(jsonString)
     }
   }
 
-  @ReactMethod 
+  @ReactMethod
   fun getEligibleProducts(requestData: ReadableMap,promise: Promise){
     try{
       val paperDbObject = PaperDbFunctions();
@@ -1098,9 +1124,9 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       jsonObject.put("message", "Internal Server Error.")
       jsonObject.put("code", 500)
       val jsonString = jsonObject.toString()
-      promise.reject(jsonString)      
+      promise.reject(jsonString)
     }
-    
+
   }
 
 // @ReactMethod
@@ -1852,6 +1878,7 @@ fun registerCustomer(requestData: ReadableMap,promise: Promise){
     val cresp = requestData.getMap("cresp")
     val selectedProd = requestData.getMap("selectedProd")
     val requestBody = RegisterWarrantyRequest(
+      "SDK",
       requestData.getString("nameTitle") ?: "",
       requestData.getString("contactNo") ?: "",
       requestData.getString("name") ?: "",
@@ -1877,7 +1904,7 @@ fun registerCustomer(requestData: ReadableMap,promise: Promise){
       requestData.getString("emptStr") ?: "",
       Cresp(
         cresp?.getString("custIdForProdInstall") ?: "",
-        cresp?.getString("modelForProdInstall") ?: "", 
+        cresp?.getString("modelForProdInstall") ?: "",
         cresp?.getInt("errorCode") ?: 0,
         cresp?.getString("errorMsg") ?: "",
         cresp?.getInt("statusType") ?: 0,
@@ -1918,7 +1945,7 @@ fun registerCustomer(requestData: ReadableMap,promise: Promise){
         selectedProd?.getString("paytmMobileNo") ?: "",
       ),
       requestData.getString("latitude") ?: "",
-      requestData.getString("longitude") ?: "",   
+      requestData.getString("longitude") ?: "",
       requestData.getString("geolocation") ?: "",
       requestData.getString("dealerCategory") ?: "",
     )
@@ -1986,7 +2013,7 @@ fun registerCustomer(requestData: ReadableMap,promise: Promise){
     jsonObject.put("message", "Internal Server Error.")
     jsonObject.put("code", 500)
     val jsonString = jsonObject.toString()
-    promise.reject(jsonString)      
+    promise.reject(jsonString)
   }
 }
 
@@ -2080,7 +2107,7 @@ fun processForPin(requestData: ReadableMap,promise: Promise){
     jsonObject.put("code", 500)
     val jsonString = jsonObject.toString()
     promise.reject(jsonString)
-  } 
+  }
 }
 
 @ReactMethod
@@ -2175,10 +2202,10 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
     jsonObject.put("code", 500)
     val jsonString = jsonObject.toString()
     promise.reject(jsonString)
-  } 
+  }
 }
 //getCategoryProductDetails
-@ReactMethod 
+@ReactMethod
   fun getProductCrossSellScheme(requestData: ReadableMap,promise: Promise){
     try{
       val paperDbObject = PaperDbFunctions();
@@ -2282,13 +2309,13 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
       jsonObject.put("message", "Internal Server Error.")
       jsonObject.put("code", 500)
       val jsonString = jsonObject.toString()
-      promise.reject(jsonString)      
+      promise.reject(jsonString)
     }
-    
+
   }
 
 //getCategoryProductDetails
-@ReactMethod 
+@ReactMethod
   fun getProductSlabBasedScheme(requestData: ReadableMap,promise: Promise){
     try{
       val paperDbObject = PaperDbFunctions();
@@ -2395,9 +2422,9 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
       jsonObject.put("message", "Internal Server Error.")
       jsonObject.put("code", 500)
       val jsonString = jsonObject.toString()
-      promise.reject(jsonString)      
+      promise.reject(jsonString)
     }
-    
+
   }
 
 
@@ -2490,11 +2517,11 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
       jsonObject.put("code", 500)
       val jsonString = jsonObject.toString()
       promise.reject(jsonString)
-    } 
+    }
   }
 
-  
- 
+
+
 
   @ReactMethod
 fun scanIn(requestData: ReadableMap,promise: Promise){
@@ -2516,13 +2543,14 @@ fun scanIn(requestData: ReadableMap,promise: Promise){
         requestData.getString("smsText") ?: "",
         requestData.getString("from") ?: "",
         requestData.getString("userType") ?: "",
-        requestData.getString("userId") ?:"", 
+        requestData.getString("userId") ?:"",
         requestData.getString("apmID") ?:"",
         requestData.getString("userCode") ?: "",
         requestData.getString("latitude") ?: "",
         requestData.getString("longitude") ?: "",
         requestData.getString("geolocation") ?: "",
         requestData.getString("category") ?: "",
+        "SDK"
     )
     val stringRequest = object : StringRequest(
         Method.POST, baseurl+"/coupon/scanIn",
@@ -2587,7 +2615,7 @@ fun scanIn(requestData: ReadableMap,promise: Promise){
     jsonObject.put("code", 500)
     val jsonString = jsonObject.toString()
     promise.reject(jsonString)
-  } 
+  }
 }
 
 
@@ -2613,7 +2641,7 @@ fun scanIn(requestData: ReadableMap,promise: Promise){
 
       Log.d("b",fullUrl)
       val stringRequest = object : StringRequest(
-        Method.GET, 
+        Method.GET,
         fullUrl, // Modified URL with query parameters
         Response.Listener { response ->
           promise.resolve(response)
@@ -2667,7 +2695,7 @@ fun scanIn(requestData: ReadableMap,promise: Promise){
       jsonObject.put("message", "Internal Server Error.")
       jsonObject.put("code", 500)
       val jsonString = jsonObject.toString()
-      promise.reject(jsonString)      
+      promise.reject(jsonString)
     }
   }
 
@@ -2721,7 +2749,7 @@ fun uploadFile(requestData: ReadableMap,promise:Promise) {
     jsonObject.put("message", "Internal Server Error.")
     jsonObject.put("code", 500)
     val jsonString = jsonObject.toString()
-    promise.reject(jsonString)   
+    promise.reject(jsonString)
   }
 }
 
@@ -2929,7 +2957,7 @@ fun GetPrimarySchemeFileList(promise: Promise){
     val baseurl = paperDbObject.getBaseURL();
       val context = reactApplicationContext
       val queue = Volley.newRequestQueue(context)
-      
+
     val stringRequest = object : StringRequest(
         Method.GET, baseurl+"/schemes/getActiveSchemeOffers",
         Response.Listener { response ->
@@ -2985,7 +3013,7 @@ fun GetPrimarySchemeFileList(promise: Promise){
     jsonObject.put("code", 500)
     val jsonString = jsonObject.toString()
     promise.reject(jsonString)
-  } 
+  }
 }
 
 

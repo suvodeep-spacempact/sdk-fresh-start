@@ -621,9 +621,9 @@ export default function App() {
   async function intializesdk() {
     try {
       let data = await InitializeSDK({
-        baseurl: 'https://retailer.vguardrishta.com/vguard/api',
+        baseurl: 'https://stg-retailer.vguardrishta.com/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI1NDk3NSwicm9sZUlkIjoiMiIsInVzZXJDb2RlIjoiVkdJTDAyMTg1MTMiLCJpc0FjdGl2ZSI6IjEiLCJtb2JpbGUiOiI4MDU2MzMwNTIzIiwiZGlzcGxheU5hbWUiOiJSQUpBTEFLU0hNSSIsImlhdCI6MTczMjcwNDIxNCwiZXhwIjoxNzM1Mjk2MjE0fQ.9sXmqPb-G84BpGgtuF0pZur7ASs1fVlc1YBKRfc_1J4',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI1OTgxLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDIwMjE0MiIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6IjgwNTYzMzA1MjMiLCJkaXNwbGF5TmFtZSI6IlNhbmdlZXRoIiwiaWF0IjoxNzQwNzUxNDM5LCJleHAiOjE3NDMzNDM0Mzl9.b3ynpfv3Bwtx5TV3Su-ZG3Aq9fhIn4caYLRdFo8Dp5U',
         refreshtoken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI1NDk3NSwicm9sZUlkIjoiMiIsInVzZXJDb2RlIjoiVkdJTDAyMTg1MTMiLCJpc0FjdGl2ZSI6IjEiLCJtb2JpbGUiOiI4MDU2MzMwNTIzIiwiZGlzcGxheU5hbWUiOiJSQUpBTEFLU0hNSSIsImlhdCI6MTczMjcwNDIxNCwiZXhwIjoxNzM1Mjk2MjE0fQ.mHspKG1dpHPXKjw99jHxXSyJXl1sSNvzlVXitF3foyI',
       });
