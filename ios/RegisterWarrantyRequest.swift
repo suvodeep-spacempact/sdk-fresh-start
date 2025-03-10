@@ -1,6 +1,7 @@
 import Foundation
 
 class RegisterWarrantyRequest: Codable {
+    var source:String
     var nameTitle: String
     var contactNo: String
     var name: String
@@ -32,6 +33,7 @@ class RegisterWarrantyRequest: Codable {
     var dealerCategory: String
 
     init(details: NSDictionary) {
+        source = "SDK"
         nameTitle = details["nameTitle"] as? String ?? ""
         contactNo = details["contactNo"] as? String ?? ""
         name = details["name"] as? String ?? ""
