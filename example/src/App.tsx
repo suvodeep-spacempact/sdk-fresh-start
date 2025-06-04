@@ -47,7 +47,7 @@ import {
 export default function App() {
   const [result, setResult] = React.useState<string | number | undefined>();
   React.useEffect(() => {
-    Promise.resolve(intializesdk());
+    //Promise.resolve(intializesdk());
   }, []);
 
   async function bankdetails() {
@@ -623,7 +623,7 @@ export default function App() {
       let data = await InitializeSDK({
         baseurl: 'https://stg-retailer.vguardrishta.com/vguard/api',
         accesstoken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI1OTgxLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDIwMjE0MiIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6IjgwNTYzMzA1MjMiLCJkaXNwbGF5TmFtZSI6IlNhbmdlZXRoIiwiaWF0IjoxNzQwNzUxNDM5LCJleHAiOjE3NDMzNDM0Mzl9.b3ynpfv3Bwtx5TV3Su-ZG3Aq9fhIn4caYLRdFo8Dp5U',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI2MDYzLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDIwMjE1MiIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6IjcwNDIwNzMwMTgiLCJkaXNwbGF5TmFtZSI6IlBlbmRla2FyIiwiaWF0IjoxNzQ4OTQwNzQ1LCJleHAiOjE3NTE1MzI3NDV9.N4WZC3BksUXbMq7NJ1rtWVoyv6aP9jAPqDISlLndVTk',
         refreshtoken:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI1NDk3NSwicm9sZUlkIjoiMiIsInVzZXJDb2RlIjoiVkdJTDAyMTg1MTMiLCJpc0FjdGl2ZSI6IjEiLCJtb2JpbGUiOiI4MDU2MzMwNTIzIiwiZGlzcGxheU5hbWUiOiJSQUpBTEFLU0hNSSIsImlhdCI6MTczMjcwNDIxNCwiZXhwIjoxNzM1Mjk2MjE0fQ.mHspKG1dpHPXKjw99jHxXSyJXl1sSNvzlVXitF3foyI',
       });
