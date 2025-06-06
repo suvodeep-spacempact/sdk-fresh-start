@@ -1743,7 +1743,7 @@ class VgRetailerSdk: NSObject {
  
         let errorResponse: [String: Any] = [
 
-            "message": "Internal Server Error.",
+            "message": "Please initialize sdk with proper details: baseurl, accesstoken, and refreshtoken are required.",
 
             "error": "Please initialize sdk with proper details: baseurl, accesstoken, and refreshtoken are required",
 
