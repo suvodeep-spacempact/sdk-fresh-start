@@ -622,8 +622,8 @@ export default function App() {
     try {
       let data = await InitializeSDK({
         baseurl: 'https://stg-retailer.vguardrishta.com/vguard/api',
-        accesstoken: '',
-        refreshtoken: '',
+        accesstoken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI2MDYzLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDIwMjE1MiIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6IjcwNDIwNzMwMTgiLCJkaXNwbGF5TmFtZSI6IlBlbmRla2FyIiwiaWF0IjoxNzQ5MjEzMjUwLCJleHAiOjE3NTE4MDUyNTB9.H1PboLM1s00eRxABu-6sjBp78RLe7kYuLnbgvuLJomI',
+        refreshtoken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI2MDYzLCJyb2xlSWQiOiIyIiwidXNlckNvZGUiOiJWR0lMMDIwMjE1MiIsImlzQWN0aXZlIjoiMSIsIm1vYmlsZSI6IjcwNDIwNzMwMTgiLCJkaXNwbGF5TmFtZSI6IlBlbmRla2FyIiwiaWF0IjoxNzQ5MjEzMjUwLCJleHAiOjE3NTE4MDUyNTB9.H1PboLM1s00eRxABu-6sjBp78RLe7kYuLnbgvuLJomI',
       });
       console.log(data);
       setResult(data.toString());

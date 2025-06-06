@@ -115,10 +115,21 @@ class VgRetailerSdk: NSObject {
 
     @objc(verifyBankDetails:withResolver:withRejecter:)
     func verifyBankDetails(details: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             refreshAccessToken()
@@ -158,10 +169,21 @@ class VgRetailerSdk: NSObject {
 
     @objc(getCategoriesList:withResolver:withRejecter:)
     func getCategoriesList(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             refreshAccessToken()
@@ -198,10 +220,21 @@ class VgRetailerSdk: NSObject {
     
     @objc(getUserBasePoints:withResolver:withRejecter:)
     func getUserBasePoints(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -239,10 +272,21 @@ class VgRetailerSdk: NSObject {
     
     @objc(getUserScanHistory:withResolver:withRejecter:)
     func getUserScanHistory(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -280,10 +324,21 @@ class VgRetailerSdk: NSObject {
     
     @objc(rewardPointsHistory:withResolver:withRejecter:)
     func rewardPointsHistory (details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -320,10 +375,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(ScannedBalancePoints:withResolver:withRejecter:)
     func ScannedBalancePoints(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -360,10 +426,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(userScanOutPointSummary:withResolver:withRejecter:)
     func userScanOutPointSummary(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -400,10 +477,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(captureCustomerDetails:withResolver:withRejecter:)
     func captureCustomerDetails(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -434,10 +522,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(registerWarranty:withResolver:withRejecter:)
     func registerWarranty(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -475,10 +574,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getEligibleProducts:withResolver:withRejecter:)
     func getEligibleProducts(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -516,10 +626,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getComboSlabSchemes:withResolver:withRejecter:)
     func getComboSlabSchemes(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -557,10 +678,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getSlabView:withResolver:withRejecter:)
     func getSlabView(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -598,10 +730,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getCrossSchemesDetails:withResolver:withRejecter:)
     func getCrossSchemesDetails(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -639,10 +782,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getSlabBasedSchemes:withResolver:withRejecter:)
     func getSlabBasedSchemes(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -680,10 +834,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(validateRetailerCoupon:withResolver:withRejecter:)
     func validateRetailerCoupon(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -721,10 +886,22 @@ class VgRetailerSdk: NSObject {
     }
     @objc(registerCustomer:withResolver:withRejecter:)
     func registerCustomer(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
+        
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -763,10 +940,21 @@ class VgRetailerSdk: NSObject {
     
     @objc(processForPin:withResolver:withRejecter:)
     func processForPin(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -804,10 +992,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(processCoupon:withResolver:withRejecter:)
     func processCoupon(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -845,10 +1044,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getProductCrossSellScheme:withResolver:withRejecter:)
     func getProductCrossSellScheme(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -886,10 +1096,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getProductSlabBasedScheme:withResolver:withRejecter:)
     func getProductSlabBasedScheme(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -927,10 +1148,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(bankTransfer:withResolver:withRejecter:)
     func bankTransfer(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -969,10 +1201,21 @@ class VgRetailerSdk: NSObject {
     
     @objc(scanIn:withResolver:withRejecter:)
     func scanIn(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -1011,10 +1254,21 @@ class VgRetailerSdk: NSObject {
     
     @objc(getFile:withResolver:withRejecter:)
     func getFile(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -1054,10 +1308,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getSchemeFileList:withResolver:withRejecter:)
     func getSchemeFileList(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -1095,10 +1360,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getTdsCertificate:withResolver:withRejecter:)
     func getTdsCertificate(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -1137,10 +1413,21 @@ class VgRetailerSdk: NSObject {
     
     @objc(GetPrimarySchemeFileList:withRejecter:)
     func GetPrimarySchemeFileList(_ resolve: @escaping (Any?) -> Void, withRejecter reject: @escaping (String, String, Error?) -> Void) {
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -1168,10 +1455,21 @@ class VgRetailerSdk: NSObject {
    
     @objc(getCurrentSlabOnCrossSell:withResolver:withRejecter:)
     func getCurrentSlabOnCrossSell(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -1209,10 +1507,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getCurrentSlabOnSlabBased:withResolver:withRejecter:)
     func getCurrentSlabOnSlabBased(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -1250,10 +1559,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getSchemeSlabBasedSlab:withResolver:withRejecter:)
     func getSchemeSlabBasedSlab(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             refreshAccessToken()
@@ -1290,10 +1610,21 @@ class VgRetailerSdk: NSObject {
     }
     @objc(getSchemeCrossBasedSlab:withResolver:withRejecter:)
     func getSchemeCrossBasedSlab(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void){
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             refreshAccessToken()
@@ -1331,10 +1662,21 @@ class VgRetailerSdk: NSObject {
 
     @objc(uploadFile:withResolver:withRejecter:)
     func uploadFile(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void) {
+        // guard var config = config else {
+        //         reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
+        //         return
+        //     }
         guard var config = config else {
-                reject("SDK_NOT_INITIALIZED", "SDK not initialized", nil)
-                return
-            }
+    let errorJson = """
+    {
+        "message": "SDK not initialized. Please initialize sdk before using any SDK methods.",
+        "code": 1001,
+        "error": "SDK_NOT_INITIALIZED"
+    }
+    """
+    reject("SDK_NOT_INITIALIZED", errorJson, nil)
+    return
+}
         let token = config.accesstoken
         if(isTokenExpired(token: token)){
             
@@ -1392,34 +1734,112 @@ class VgRetailerSdk: NSObject {
     
     @objc(InitializeSDK:withResolver:withRejecter:)
     func InitializeSDK(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void) {
-            guard let baseurl = details["baseurl"] as? String,
-                  let accesstoken = details["accesstoken"] as? String,
-                  let refreshtoken = details["refreshtoken"] as? String else {
-                reject("INVALID_DETAILS", "Invalid details provided", nil)
-                return
-            }
 
-            let newConfig = APIConfig(baseurl: baseurl, accesstoken: accesstoken, refreshtoken: refreshtoken)
-            config = newConfig
+    guard let baseurl = details["baseurl"] as? String, !baseurl.isEmpty,
 
-            // You can access the stored values within this function as well
-            if let config = config {
-                print("Initialized SDK with Base URL: \(config.baseurl)")
-                print("Initialized SDK with Access Token: \(config.accesstoken)")
-                print("Initialized SDK with Refresh Token: \(config.refreshtoken)")
-            }
-        let response = ["message": "SDK was initialized successfully.", "status": "200"]
-        if let jsonData = try? JSONSerialization.data(withJSONObject: response, options: []),
-               let jsonString = String(data: jsonData, encoding: .utf8) {
-                resolve(jsonString)
-            } else {
-                reject("JSON_ENCODING_ERROR", "Failed to encode response as JSON string", nil)
-            }
+          let accesstoken = details["accesstoken"] as? String, !accesstoken.isEmpty,
+
+          let refreshtoken = details["refreshtoken"] as? String, !refreshtoken.isEmpty else {
+ 
+        let errorResponse: [String: Any] = [
+
+            "message": "Internal Server Error.",
+
+            "error": "Please initialize sdk with proper details: baseurl, accesstoken, and refreshtoken are required",
+
+            "status": "1002"
+
+        ]
+ 
+        if let jsonData = try? JSONSerialization.data(withJSONObject: errorResponse, options: []),
+
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+
+            reject("INVALID_DETAILS", jsonString, nil)
+
+        } else {
+
+            reject("INVALID_DETAILS", "Invalid input and failed to encode error message", nil)
+
         }
-    
+ 
+        return
 
+    }
+ 
+    let newConfig = APIConfig(baseurl: baseurl, accesstoken: accesstoken, refreshtoken: refreshtoken)
 
-    
+    config = newConfig
+ 
+    let successResponse: [String: Any] = [
+
+        "message": "SDK was initialized successfully.",
+
+        "status": "200"
+
+    ]
+ 
+    if let jsonData = try? JSONSerialization.data(withJSONObject: successResponse, options: []),
+
+       let jsonString = String(data: jsonData, encoding: .utf8) {
+
+        resolve(jsonString)
+
+    } else {
+
+        let errorResponse: [String: Any] = [
+
+            "message": "Internal Server Error.",
+
+            "error": "Failed to encode response as JSON string",
+
+            "status": "500"
+
+        ]
+ 
+        if let errorData = try? JSONSerialization.data(withJSONObject: errorResponse, options: []),
+
+           let errorString = String(data: errorData, encoding: .utf8) {
+
+            reject("JSON_ENCODING_ERROR", errorString, nil)
+
+        } else {
+
+            reject("JSON_ENCODING_ERROR", "Unknown error occurred", nil)
+
+        }
+
+    }
+
+}
+
+ 
+    // func InitializeSDK(details: NSDictionary, resolve: @escaping (Any?) -> Void, reject: @escaping (String, String, Error?) -> Void) {
+        //     guard let baseurl = details["baseurl"] as? String,
+        //           let accesstoken = details["accesstoken"] as? String,
+        //           let refreshtoken = details["refreshtoken"] as? String else {
+        //         reject("INVALID_DETAILS", "Invalid details provided", nil)
+        //         return
+        //     }
+
+        //     let newConfig = APIConfig(baseurl: baseurl, accesstoken: accesstoken, refreshtoken: refreshtoken)
+        //     config = newConfig
+
+        //     // You can access the stored values within this function as well
+        //     if let config = config {
+        //         print("Initialized SDK with Base URL: \(config.baseurl)")
+        //         print("Initialized SDK with Access Token: \(config.accesstoken)")
+        //         print("Initialized SDK with Refresh Token: \(config.refreshtoken)")
+        //     }
+        // let response = ["message": "SDK was initialized successfully.", "status": "200"]
+        // if let jsonData = try? JSONSerialization.data(withJSONObject: response, options: []),
+        //        let jsonString = String(data: jsonData, encoding: .utf8) {
+        //         resolve(jsonString)
+        //     } else {
+        //         reject("JSON_ENCODING_ERROR", "Failed to encode response as JSON string", nil)
+        //     }
+        // }
+
 
 
 }

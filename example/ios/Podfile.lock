@@ -949,7 +949,7 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-vg-retailer-sdk (0.9.0):
+  - react-native-vg-retailer-sdk (0.10.7):
     - Alamofire (~> 5.4)
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1363,7 +1363,7 @@ SPEC CHECKSUMS:
   React-logger: 7b19bdfb254772a0332d6cd4d66eceb0678b6730
   React-Mapbuffer: 6f392912435adb8fbf4c3eee0e79a0a0b4e4b717
   react-native-image-picker: d3db110a3ded6e48c93aef7e8e51afdde8b16ed0
-  react-native-vg-retailer-sdk: b39894783545d72a0c11dd50e06312903ec27e7b
+  react-native-vg-retailer-sdk: a9289fac50ec3a173d3805e54278f62464d7ad20
   React-nativeconfig: 754233aac2a769578f828093b672b399355582e6
   React-NativeModulesApple: a03b2da2b8e127d5f5ee29c683e0deba7a9e1575
   React-perflogger: 68ec84e2f858a3e35009aef8866b55893e5e0a1f
@@ -1389,4 +1389,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 104c2dce020e46af7ccdd2c7dfab4d55967f114d
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
