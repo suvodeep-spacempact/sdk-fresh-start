@@ -3307,8 +3307,9 @@ fun GetPrimarySchemeFileList(promise: Promise){
     // Input validation
     if (baseUrl.isNullOrBlank() || accessToken.isNullOrBlank() || refreshToken.isNullOrBlank()) {
         val errorObject = JSONObject()
-        errorObject.put("message", "Please initialize sdk with proper details: baseurl, accesstoken, and refreshtoken are required.")
+        errorObject.put("message", "Internal Server Error.")
         errorObject.put("status", "1002")
+        errorObject.put("error","Please initialize sdk with proper details: baseurl, accesstoken, and refreshtoken are required.")
         promise.reject("INIT_ERROR", errorObject.toString())
         return
     }
