@@ -3284,19 +3284,50 @@ fun GetPrimarySchemeFileList(promise: Promise){
 
 
   @ReactMethod
-  fun InitializeSDK(requestData: ReadableMap,promise: Promise){
-    Paper.init(reactApplicationContext)
-    val sdk = InitializeSDKNew(
-        requestData.getString("baseurl") ?: "",
-        requestData.getString("accesstoken") ?: "",
-        requestData.getString("refreshtoken") ?: "",
-    )
-    val jsonObject = JSONObject()
-    jsonObject.put("message", "SDK was initialized successfully.")
-    jsonObject.put("status", "200")
-    val jsonString = jsonObject.toString()
-    promise.resolve(jsonString)
-  }
+  // fun InitializeSDK(requestData: ReadableMap,promise: Promise){
+    
+  //   Paper.init(reactApplicationContext)
+  //   val sdk = InitializeSDKNew(
+  //       requestData.getString("baseurl") ?: "",
+  //       requestData.getString("accesstoken") ?: "",
+  //       requestData.getString("refreshtoken") ?: "",
+  //   )
+  //   val jsonObject = JSONObject()
+  //   jsonObject.put("message", "SDK was initialized successfully.")
+  //   jsonObject.put("status", "200")
+  //   val jsonString = jsonObject.toString()
+  //   promise.resolve(jsonString)
+  // }
+
+  fun InitializeSDK(requestData: ReadableMap, promise: Promise) {
+    val baseUrl = requestData.getString("baseurl")
+    val accessToken = requestData.getString("accesstoken")
+    val refreshToken = requestData.getString("refreshtoken")
+
+    // Input validation
+    if (baseUrl.isNullOrBlank() || accessToken.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+        val errorObject = JSONObject()
+        errorObject.put("message", "Please initialize sdk with proper details: baseurl, accesstoken, and refreshtoken are required.")
+        errorObject.put("status", "1002")
+        promise.reject("INIT_ERROR", errorObject.toString())
+        return
+    }
+
+    try {
+        Paper.init(reactApplicationContext)
+
+        val sdk = InitializeSDKNew(baseUrl, accessToken, refreshToken)
+
+        val jsonObject = JSONObject()
+        jsonObject.put("message", "SDK was initialized successfully.")
+        jsonObject.put("status", "200")
+        val jsonString = jsonObject.toString()
+        promise.resolve(jsonString)
+    } catch (e: Exception) {
+        promise.reject("INIT_EXCEPTION", "SDK initialization failed: ${e.message}", e)
+    }
+}
+
 
   companion object {
     const val NAME = "VgRetailerSdk"
