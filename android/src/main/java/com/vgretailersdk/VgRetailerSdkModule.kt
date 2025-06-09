@@ -110,6 +110,15 @@ fun verifyBankDetails(requestData: ReadableMap,promise: Promise) {
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    Log.d("lohith","token is $token")
+    Log.d("lohith","refreshToken is $refreshToken")
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -172,6 +181,7 @@ fun verifyBankDetails(requestData: ReadableMap,promise: Promise) {
       )
       queue.add(stringRequest)
     }catch (e: Exception) {
+      Log.d("lohith","$e")
       if(e is RegenerateAccessTokenError){
         val jsonObject = JSONObject()
         jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
@@ -203,6 +213,13 @@ fun getCategoriesList(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -302,6 +319,13 @@ fun getUserBasePoints(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -415,6 +439,13 @@ fun getUserScanHistory(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -520,6 +551,13 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -638,6 +676,13 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -763,6 +808,13 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -888,6 +940,13 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -972,6 +1031,13 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -1133,6 +1199,13 @@ fun rewardPointsHistory(requestData: ReadableMap,promise: Promise){
       val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -1329,6 +1402,13 @@ fun getCurrentSlabOnSlabBased(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -1422,6 +1502,13 @@ fun getCurrentSlabOnCrossSell(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -1514,6 +1601,13 @@ fun getSchemeSlabBasedSlab(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -1604,6 +1698,13 @@ fun getSchemeCrossBasedSlab(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -1696,6 +1797,13 @@ fun getCrossSchemesDetails(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -1810,6 +1918,13 @@ fun getSlabBasedSchemes(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -1924,6 +2039,13 @@ fun validateRetailerCoupon(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -2020,6 +2142,13 @@ fun registerCustomer(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
   val token = paperDbObject.getAccessToken();
   val refreshToken = paperDbObject.getRefreshToken();
+  if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
   val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
   if (isTokenExpired(token)) {
     refresAccessTokenObject.refreshAccessToken()
@@ -2186,6 +2315,13 @@ fun processForPin(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -2287,6 +2423,13 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -2391,6 +2534,13 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
       val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -2510,6 +2660,13 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
       val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -2630,6 +2787,13 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
       val paperDbObject = PaperDbFunctions();
       val token = paperDbObject.getAccessToken();
       val refreshToken = paperDbObject.getRefreshToken();
+      if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
       val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
       if (isTokenExpired(token)) {
         refresAccessTokenObject.refreshAccessToken()
@@ -2732,6 +2896,13 @@ fun scanIn(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -2837,6 +3008,13 @@ fun scanIn(requestData: ReadableMap,promise: Promise){
       val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -2997,6 +3175,13 @@ fun getSchemeFileList(requestData: ReadableMap,promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -3089,6 +3274,13 @@ fun getTdsCertificate(requestData: ReadableMap,promise: Promise) {
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -3204,6 +3396,13 @@ fun GetPrimarySchemeFileList(promise: Promise){
     val paperDbObject = PaperDbFunctions();
     val token = paperDbObject.getAccessToken();
     val refreshToken = paperDbObject.getRefreshToken();
+    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+    val jsonObject = JSONObject()
+    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
+    jsonObject.put("code", 1001)
+    promise.reject(jsonObject.toString())
+    return
+}
     val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
     if (isTokenExpired(token)) {
       refresAccessTokenObject.refreshAccessToken()
@@ -3300,9 +3499,15 @@ fun GetPrimarySchemeFileList(promise: Promise){
   // }
 
   fun InitializeSDK(requestData: ReadableMap, promise: Promise) {
+    Paper.init(reactApplicationContext)
+    Paper.book().destroy()
+    Paper.book().delete("baseurl")
+    Paper.book().delete("accesstoken")
+    Paper.book().delete("refreshtoken")
     val baseUrl = requestData.getString("baseurl")
     val accessToken = requestData.getString("accesstoken")
     val refreshToken = requestData.getString("refreshtoken")
+    
 
     // Input validation
     if (baseUrl.isNullOrBlank() || accessToken.isNullOrBlank() || refreshToken.isNullOrBlank()) {
