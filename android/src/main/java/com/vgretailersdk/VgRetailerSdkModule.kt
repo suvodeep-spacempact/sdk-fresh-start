@@ -2891,114 +2891,136 @@ fun processCoupon(requestData: ReadableMap,promise: Promise){
 
 
   @ReactMethod
-fun scanIn(requestData: ReadableMap,promise: Promise){
-  try{
-    val paperDbObject = PaperDbFunctions();
-    val token = paperDbObject.getAccessToken();
-    val refreshToken = paperDbObject.getRefreshToken();
-    if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
-    val jsonObject = JSONObject()
-    jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
-    jsonObject.put("code", 1001)
-    promise.reject(jsonObject.toString())
-    return
-}
-    val refresAccessTokenObject = GenerateAccessToken(refreshToken,reactApplicationContext)
-    if (isTokenExpired(token)) {
-      refresAccessTokenObject.refreshAccessToken()
-    }
-    val accessToken = paperDbObject.getAccessToken();
-    val baseurl = paperDbObject.getBaseURL();
-      val context = reactApplicationContext
-      val queue = Volley.newRequestQueue(context)
-      val requestBody = ScanInRequest(
-        requestData.getString("couponCode") ?: "",
-        requestData.getString("pin") ?: "",
-        requestData.getString("smsText") ?: "",
-        requestData.getString("from") ?: "",
-        requestData.getString("userType") ?: "",
-        requestData.getString("userId") ?:"",
-        requestData.getString("apmID") ?:"",
-        requestData.getString("userCode") ?: "",
-        requestData.getString("latitude") ?: "",
-        requestData.getString("longitude") ?: "",
-        requestData.getString("geolocation") ?: "",
-        requestData.getString("category") ?: "",
-        "SDK"
-    )
-    val stringRequest = object : StringRequest(
-        Method.POST, baseurl+"/coupon/scanIn",
-        Response.Listener { response ->
-            promise.resolve(response)
-        },
-        Response.ErrorListener { error ->
-          Log.d("b","error is in error listnere $error")
-          val errorCode = error.networkResponse?.statusCode
-          val gson = Gson().toJson(error.networkResponse)
-          Log.d("b","error is in error listnere $gson")
-          if(errorCode == 403 || errorCode == 401){
-            val jsonObject = JSONObject()
-            jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
-            jsonObject.put("code", 440)
-            val jsonString = jsonObject.toString()
-            promise.reject(jsonString)
-          }else if(errorCode == 440){
-            val jsonObject = JSONObject()
-            jsonObject.put("message", "Please retry the action")
-            jsonObject.put("code", 440)
-            val jsonString = jsonObject.toString()
-            promise.reject(jsonString)
-          }
-          val jsonObject = JSONObject()
-          jsonObject.put("message", "Internal Server Error.")
-          jsonObject.put("code", 500)
-          val jsonString = jsonObject.toString()
-          promise.reject(jsonString)
-        }) {
-        override fun getBody(): ByteArray {
-            val gson = Gson()
-            val jsonBody = gson.toJson(requestBody)
-            return jsonBody.toByteArray()
+fun scanIn(requestData: ReadableMap, promise: Promise) {
+    try {
+        val paperDbObject = PaperDbFunctions()
+        val token = paperDbObject.getAccessToken()
+        val refreshToken = paperDbObject.getRefreshToken()
+        
+        if (token.isNullOrBlank() || refreshToken.isNullOrBlank()) {
+            val jsonObject = JSONObject().apply {
+                put("message", "SDK not initialized. Please initialize SDK before using any SDK methods.")
+                put("code", 1001)
+            }
+            promise.reject("1001", jsonObject.toString())
+            return
         }
-        override fun getBodyContentType(): String {
-            return "application/json"
+
+        val refresAccessTokenObject = GenerateAccessToken(refreshToken, reactApplicationContext)
+        if (isTokenExpired(token)) {
+            refresAccessTokenObject.refreshAccessToken()
         }
-        override fun getHeaders(): Map<String, String> {
-            val headers = HashMap<String, String>()
-            headers["Authorization"] = "Bearer $accessToken"
-            return headers
+
+        val accessToken = paperDbObject.getAccessToken()
+        val baseurl = paperDbObject.getBaseURL()
+        val context = reactApplicationContext
+        val queue = Volley.newRequestQueue(context)
+
+        val requestBody = ScanInRequest(
+            requestData.getString("couponCode") ?: "",
+            requestData.getString("pin") ?: "",
+            requestData.getString("smsText") ?: "",
+            requestData.getString("from") ?: "",
+            requestData.getString("userType") ?: "",
+            requestData.getString("userId") ?:"",
+            requestData.getString("apmID") ?:"",
+            requestData.getString("userCode") ?: "",
+            requestData.getString("latitude") ?: "",
+            requestData.getString("longitude") ?: "",
+            requestData.getString("geolocation") ?: "",
+            requestData.getString("category") ?: "",
+            "SDK"
+        )
+
+        val stringRequest = object : StringRequest(
+            Method.POST, "$baseurl/coupon/scanIn",
+            Response.Listener { response ->
+                promise.resolve(response) // Removed JSON validation to maintain original behavior
+            },
+            Response.ErrorListener { error ->
+                try {
+                    val errorCode = error.networkResponse?.statusCode
+                    val errorBody = error.networkResponse?.data?.let { 
+                        String(it, Charsets.UTF_8) 
+                    } ?: error.toString() // Include Volley error if no response body
+                    
+                    // Handle "Unexpected character: C" case
+                    if (errorBody.startsWith("C") || error.toString().contains("Unexpected character: C")) {
+                        val jsonObject = JSONObject().apply {
+                            put("message", "Network request failed")
+                            put("code", 503)
+                            put("response", errorBody)
+                        }
+                        promise.reject("503", jsonObject.toString())
+                        return@ErrorListener
+                    }
+                    
+                    // Original error handling remains unchanged below
+                    val jsonObject = JSONObject()
+                    if(errorCode == 403 || errorCode == 401){
+                        jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
+                        jsonObject.put("code", 440)
+                    }else if(errorCode == 440){
+                        jsonObject.put("message", "Please retry the action")
+                        jsonObject.put("code", 440)
+                    }else{
+                        jsonObject.put("message", "Internal Server Error.")
+                        jsonObject.put("code", 500)
+                    }
+                    jsonObject.put("response", errorBody)
+                    promise.reject(jsonObject.getString("code"), jsonObject.toString())
+                } catch (e: Exception) {
+                    val jsonObject = JSONObject().apply {
+                        put("message", "Error processing request")
+                        put("code", 500)
+                        put("error", e.toString())
+                    }
+                    promise.reject("500", jsonObject.toString())
+                }
+            }
+        ) {
+            override fun getBody(): ByteArray {
+                return Gson().toJson(requestBody).toByteArray()
+            }
+            
+            override fun getBodyContentType(): String {
+                return "application/json"
+            }
+            
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Bearer $accessToken"
+                return headers
+            }
         }
+        
+        stringRequest.retryPolicy = DefaultRetryPolicy(
+            50000,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
+        queue.add(stringRequest)
+        
+    } catch (error: Exception) {
+        val jsonObject = JSONObject().apply {
+            when {
+                error is RegenerateAccessTokenError -> {
+                    put("message", "Session has timed out. Please re-initialize the SDK.")
+                    put("code", 440)
+                }
+                error.message?.contains("Paper.init is not called") == true -> {
+                    put("message", "SDK not initialized. Please initialize SDK before using any SDK methods.")
+                    put("code", 1001)
+                }
+                else -> {
+                    put("message", "Internal Server Error")
+                    put("code", 500)
+                }
+            }
+            put("error", error.toString())
+        }
+        promise.reject(jsonObject.getString("code"), jsonObject.toString())
     }
-    stringRequest.retryPolicy = DefaultRetryPolicy(
-        50000,
-        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-    )
-    queue.add(stringRequest)
-  }catch(error:Exception){
-    Log.d("b","$error")
-    if(error is RegenerateAccessTokenError){
-      val jsonObject = JSONObject()
-      jsonObject.put("message", "Session has timed out. Please re-initialize the SDK.")
-      jsonObject.put("code", 440)
-      jsonObject.put("error","$error")
-      val jsonString = jsonObject.toString()
-      promise.reject(jsonString)
-    }else if (error.message?.contains("Paper.init is not called") == true) {
-        val jsonObject = JSONObject()
-        jsonObject.put("message", "SDK not initialized. Please initialize sdk  before using any SDK methods.")
-        jsonObject.put("code", 1001)
-        jsonObject.put("error", "$error")
-        val jsonString = jsonObject.toString()
-        promise.reject(jsonString)
-    }
-    val jsonObject = JSONObject()
-    jsonObject.put("message", "Internal Server Error.")
-    jsonObject.put("code", 500)
-    jsonObject.put("error","$error")
-    val jsonString = jsonObject.toString()
-    promise.reject(jsonString)
-  }
 }
 
 
